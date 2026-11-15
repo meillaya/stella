@@ -47,12 +47,15 @@ TypeScript on Node 24, Fastify gateway, SQLite (`node:sqlite`, FTS5), React 18 +
 
 ## Documentation
 
+- [`docs/RESEARCH.md`](docs/RESEARCH.md) — landscape research, API constraints, citations
 - [`docs/product-facts.md`](docs/product-facts.md) — verified DeepSeek/chat-demo facts and sources
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — components, data flow, decisions
 - [`docs/EVALS.md`](docs/EVALS.md) — metrics, judge design, gates
 - [`docs/FINETUNE.md`](docs/FINETUNE.md) — data pipeline and honest limits
+- [`docs/API.md`](docs/API.md) — HTTP contracts and ownership
+- [`docs/OPERATIONS.md`](docs/OPERATIONS.md) — setup, configuration, backup, troubleshooting
+- [`docs/DEMO.md`](docs/DEMO.md) — the end-to-end demo
 - [`UPSTREAM.md`](UPSTREAM.md) — chat-demo fork provenance and sync policy
-- [`docs/RESEARCH.md`](docs/RESEARCH.md) — landscape research and why this shape
 
 ## License and attribution
 

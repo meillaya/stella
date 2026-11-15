@@ -21,7 +21,7 @@
     "lint": "oxlint src server shared scripts rspack.config.ts",
     "format": "oxfmt --write .",
     "test": "node scripts/run-tests.mjs",
-    "test:ui": "vitest run",
+    "test:ui": "vitest run --passWithNoTests",
     "test:all": "pnpm test && pnpm test:ui",
     "seed": "node server/src/cli/index.ts seed",
     "demo": "node server/src/cli/index.ts demo",

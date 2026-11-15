@@ -6,7 +6,7 @@ const clamp01 = (value: number) => Math.min(1, Math.max(0, value))
 
 /** Wilson score interval for a binomial proportion. */
 export const wilsonInterval = (successes: number, total: number, z = 1.96): Interval => {
-  if (total <= 0) return { low: 0, high: 1 }
+  if (total <= 0) {return { low: 0, high: 1 }}
   const p = clamp01(successes / total)
   const denominator = 1 + (z * z) / total
   const center = (p + (z * z) / (2 * total)) / denominator
@@ -18,12 +18,12 @@ export const mean = (values: number[]): number | null =>
   values.length === 0 ? null : values.reduce((sum, value) => sum + value, 0) / values.length
 
 export const percentile = (values: number[], p: number): number | null => {
-  if (values.length === 0) return null
+  if (values.length === 0) {return null}
   const sorted = [...values].sort((a, b) => a - b)
   const index = (sorted.length - 1) * p
   const lower = Math.floor(index)
   const upper = Math.ceil(index)
-  if (lower === upper) return sorted[lower] ?? null
+  if (lower === upper) {return sorted[lower] ?? null}
   const weight = index - lower
   return (sorted[lower] ?? 0) * (1 - weight) + (sorted[upper] ?? 0) * weight
 }
@@ -73,7 +73,7 @@ export const pairedBootstrap = (
     }
     const sampleMean = sum / deltas.length
     means.push(sampleMean)
-    if (sampleMean <= 0) notBetter += 1
+    if (sampleMean <= 0) {notBetter += 1}
   }
   means.sort((a, b) => a - b)
   const alpha = (1 - confidence) / 2
@@ -89,26 +89,26 @@ export const pairedBootstrap = (
 }
 
 export const formatPp = (value: number | null | undefined, digits = 1): string => {
-  if (value == null || !Number.isFinite(value)) return '—'
+  if (value == null || !Number.isFinite(value)) {return '—'}
   const sign = value > 0 ? '+' : ''
   return `${sign}${value.toFixed(digits)} pp`
 }
 
 export const formatPercent = (value: number | null | undefined, digits = 1): string => {
-  if (value == null || !Number.isFinite(value)) return '—'
+  if (value == null || !Number.isFinite(value)) {return '—'}
   return `${(value * 100).toFixed(digits)}%`
 }
 
 /** Cohen's kappa for two raters over categorical labels. */
 export const cohensKappa = (pairs: [string, string][]): number | null => {
-  if (pairs.length === 0) return null
+  if (pairs.length === 0) {return null}
   const labels = new Set<string>()
   for (const [a, b] of pairs) {
     labels.add(a)
     labels.add(b)
   }
   let observed = 0
-  for (const [a, b] of pairs) if (a === b) observed += 1
+  for (const [a, b] of pairs) {if (a === b) {observed += 1}}
   const po = observed / pairs.length
   let pe = 0
   for (const label of labels) {
@@ -116,6 +116,6 @@ export const cohensKappa = (pairs: [string, string][]): number | null => {
     const b = pairs.filter(([, value]) => value === label).length / pairs.length
     pe += a * b
   }
-  if (pe >= 1) return null
+  if (pe >= 1) {return null}
   return (po - pe) / (1 - pe)
 }
