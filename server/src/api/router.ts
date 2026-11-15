@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { config, keyStatus } from '../config.ts'
 import { getSetting } from '../db/index.ts'
+import { registerCoreApi } from './core.ts'
 
 export const registerApi = (app: FastifyInstance): void => {
   app.get('/api/health', async () => {
@@ -16,4 +17,6 @@ export const registerApi = (app: FastifyInstance): void => {
       db: config.dbPath,
     }
   })
+
+  registerCoreApi(app)
 }

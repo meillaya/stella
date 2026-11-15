@@ -53,7 +53,7 @@ Body: `{ datasetId: string }` → `DatasetCase` (created or updated draft case)
 ### `GET /api/collections` → `{ items: Collection[] }`
 ### `POST /api/collections` body `{ name, description? }` → `Collection`
 ### `GET /api/collections/:id/documents` → `{ items: DocumentRecord[] }`
-### `POST /api/collections/:id/documents` (multipart `file`) → `{ document, chunks }`
+### `POST /api/collections/:id/documents` (multipart `file`) → `{ document, chunks: number }`
 ### `POST /api/collections/:id/urls` body `{ urls: string[] }` → `{ documents, errors }`
 ### `DELETE /api/documents/:id` → `{ ok: true }`
 ### `POST /api/collections/:id/search` body `{ query, k?, rerank? }` → `{ results: RetrievedChunk[] }`

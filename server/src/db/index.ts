@@ -48,6 +48,10 @@ export const setSetting = (key: string, value: string): void => {
     .run(key, value)
 }
 
+export const deleteSetting = (key: string): void => {
+  getDb().prepare('DELETE FROM settings WHERE key = ?').run(key)
+}
+
 export const getJsonSetting = <T>(key: string, fallback: T): T => {
   const raw = getSetting(key)
   if (!raw) return fallback

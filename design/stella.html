@@ -1,0 +1,1249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Stella — design specification</title>
+    <style>
+      @font-face {
+        font-family: 'IBM Plex Sans';
+        src: url('./fonts/ibm-plex-sans-latin-400-normal.woff2') format('woff2');
+        font-weight: 400;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'IBM Plex Sans';
+        src: url('./fonts/ibm-plex-sans-latin-500-normal.woff2') format('woff2');
+        font-weight: 500;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'IBM Plex Sans';
+        src: url('./fonts/ibm-plex-sans-latin-600-normal.woff2') format('woff2');
+        font-weight: 600;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'IBM Plex Mono';
+        src: url('./fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2');
+        font-weight: 400;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'IBM Plex Mono';
+        src: url('./fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2');
+        font-weight: 500;
+        font-display: swap;
+      }
+
+      :root {
+        --ui: 'IBM Plex Sans', system-ui, sans-serif;
+        --mono: 'IBM Plex Mono', ui-monospace, monospace;
+        --ink: #0f1115;
+        --ink-2: #4b515b;
+        --ink-3: #6b7280;
+        --surface: #ffffff;
+        --surface-2: #f7f8fa;
+        --surface-3: #eef1f6;
+        --border: rgba(15, 17, 21, 0.1);
+        --border-strong: rgba(15, 17, 21, 0.16);
+        --blue: #3964fe;
+        --blue-soft: #edf2ff;
+        --pass: #15803d;
+        --pass-soft: #e9f8ef;
+        --fail: #b91c1c;
+        --fail-soft: #fdeeee;
+        --warn: #b45309;
+        --warn-soft: #fdf3e3;
+        --radius: 12px;
+        --radius-sm: 8px;
+        --ease: cubic-bezier(0.32, 0.72, 0, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #fbfbfc;
+        color: var(--ink);
+        font-family: var(--ui);
+        font-size: 14px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .wrap {
+        width: min(100%, 1320px);
+        margin: 0 auto;
+        padding: 48px 40px 96px;
+      }
+
+      .masthead {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 32px;
+        padding-bottom: 28px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .brandline {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      .mark {
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        background: var(--ink);
+        color: #fff;
+      }
+
+      .masthead h1 {
+        margin: 18px 0 0;
+        font-size: 34px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        line-height: 1.12;
+      }
+
+      .masthead p {
+        max-width: 58ch;
+        margin: 10px 0 0;
+        color: var(--ink-2);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .meta {
+        display: grid;
+        gap: 4px;
+        min-width: 230px;
+        padding-top: 4px;
+        color: var(--ink-3);
+        font-family: var(--mono);
+        font-size: 11.5px;
+        text-align: right;
+      }
+
+      section {
+        padding-top: 44px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 18px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .section-head h2 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      .section-head span {
+        color: var(--ink-3);
+        font-size: 12px;
+      }
+
+      .cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+      }
+
+      .panel h3 {
+        margin: 0 0 4px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .panel .sub {
+        margin: 0 0 18px;
+        color: var(--ink-3);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .type-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 10px 0;
+        border-top: 1px solid var(--border);
+      }
+
+      .type-row:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+      }
+
+      .type-row .sample {
+        min-width: 0;
+      }
+
+      .type-row .label {
+        color: var(--ink-3);
+        font-family: var(--mono);
+        font-size: 10.5px;
+        white-space: nowrap;
+      }
+
+      .display {
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+
+      .title {
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      .body {
+        font-size: 14px;
+      }
+
+      .label-s {
+        color: var(--ink-2);
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .mono {
+        font-family: var(--mono);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .swatches {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .swatch {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 10px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+      }
+
+      .chip {
+        width: 26px;
+        height: 26px;
+        flex: 0 0 26px;
+        border-radius: 7px;
+        border: 1px solid var(--border);
+      }
+
+      .swatch .name {
+        display: block;
+        font-size: 11.5px;
+        font-weight: 500;
+      }
+
+      .swatch .hex {
+        display: block;
+        color: var(--ink-3);
+        font-family: var(--mono);
+        font-size: 10px;
+      }
+
+      .component-grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 16px;
+        align-items: start;
+      }
+
+      .span-7 {
+        grid-column: span 7;
+      }
+      .span-5 {
+        grid-column: span 5;
+      }
+      .span-4 {
+        grid-column: span 4;
+      }
+      .span-6 {
+        grid-column: span 6;
+      }
+      .span-8 {
+        grid-column: span 8;
+      }
+      .span-12 {
+        grid-column: span 12;
+      }
+
+      .verdict {
+        display: grid;
+        gap: 12px;
+        padding: 20px;
+        border-radius: var(--radius);
+        background: var(--fail-soft);
+      }
+
+      .verdict .eyebrow {
+        color: var(--ink-2);
+        font-size: 11.5px;
+        font-weight: 500;
+      }
+
+      .verdict .headline {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+
+      .verdict .why {
+        color: var(--ink-2);
+        font-size: 12.5px;
+        line-height: 1.55;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 22px;
+        padding: 0 9px;
+        border-radius: 999px;
+        font-size: 11.5px;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .badge .dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      .badge.pass {
+        color: var(--pass);
+        background: var(--pass-soft);
+      }
+      .badge.fail {
+        color: var(--fail);
+        background: var(--fail-soft);
+      }
+      .badge.warn {
+        color: var(--warn);
+        background: var(--warn-soft);
+      }
+      .badge.info {
+        color: var(--blue);
+        background: var(--blue-soft);
+      }
+      .badge.neutral {
+        color: var(--ink-2);
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+      }
+      .badge.outline {
+        color: var(--ink-3);
+        border: 1px solid var(--border);
+      }
+
+      .bar {
+        display: grid;
+        gap: 8px;
+      }
+
+      .bar-track {
+        position: relative;
+        height: 10px;
+        border-radius: 999px;
+        background: var(--surface-3);
+      }
+
+      .bar-ci {
+        position: absolute;
+        top: 0;
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(57, 100, 254, 0.22);
+      }
+
+      .bar-value {
+        position: absolute;
+        top: 50%;
+        width: 12px;
+        height: 12px;
+        margin-left: -6px;
+        transform: translateY(-50%);
+        border: 2px solid #fff;
+        border-radius: 50%;
+        background: var(--blue);
+        box-shadow: 0 0 0 1px var(--blue);
+      }
+
+      .bar-threshold {
+        position: absolute;
+        top: -4px;
+        width: 2px;
+        height: 18px;
+        margin-left: -1px;
+        border-radius: 1px;
+        background: var(--ink-3);
+      }
+
+      .bar-labels {
+        display: flex;
+        justify-content: space-between;
+        color: var(--ink-3);
+        font-family: var(--mono);
+        font-size: 10.5px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .stat {
+        padding: 14px 16px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+      }
+
+      .stat .label {
+        color: var(--ink-3);
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      .stat .value {
+        margin-top: 4px;
+        font-family: var(--mono);
+        font-size: 23px;
+        font-weight: 500;
+        letter-spacing: -0.03em;
+      }
+
+      .stat .foot {
+        margin-top: 3px;
+        color: var(--ink-3);
+        font-size: 11px;
+      }
+
+      .delta {
+        font-family: var(--mono);
+        font-size: 11px;
+      }
+      .delta.good {
+        color: var(--pass);
+      }
+      .delta.bad {
+        color: var(--fail);
+      }
+      .delta.flat {
+        color: var(--ink-3);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12.5px;
+      }
+
+      th {
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--border);
+        color: var(--ink-3);
+        font-size: 10.5px;
+        font-weight: 500;
+        text-align: left;
+        white-space: nowrap;
+      }
+
+      td {
+        padding: 11px 10px;
+        border-bottom: 1px solid var(--border);
+        color: var(--ink-2);
+        vertical-align: top;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      td.strong {
+        color: var(--ink);
+        font-weight: 500;
+      }
+
+      .num {
+        text-align: right;
+        font-family: var(--mono);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .prov {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding-top: 10px;
+        border-top: 1px solid var(--border);
+        color: var(--ink-3);
+        font-size: 11.5px;
+      }
+
+      .prov-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        height: 26px;
+        padding: 0 8px;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--ink-2);
+        font: inherit;
+      }
+
+      .prov-btn:hover {
+        border-color: var(--border);
+        background: var(--surface);
+      }
+
+      .prov-btn.pressed {
+        border-color: var(--blue);
+        background: var(--blue-soft);
+        color: var(--blue);
+      }
+
+      .src-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        max-width: 240px;
+        height: 26px;
+        padding: 0 9px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--surface);
+        color: var(--ink-2);
+        font-size: 11.5px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .src {
+        display: grid;
+        gap: 5px;
+        padding: 12px 14px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+      }
+
+      .src-head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .src-rank {
+        display: grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        background: var(--surface-2);
+        color: var(--ink-2);
+        font-family: var(--mono);
+        font-size: 10px;
+      }
+
+      .src-title {
+        color: var(--ink);
+        font-size: 12.5px;
+        font-weight: 500;
+      }
+
+      .src-meta {
+        color: var(--ink-3);
+        font-size: 10.5px;
+      }
+
+      .src-text {
+        color: var(--ink-2);
+        font-size: 11.5px;
+        line-height: 1.55;
+      }
+
+      .app-frame {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr);
+        min-height: 560px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: #fbfbfc;
+      }
+
+      .rail {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 0;
+        border-right: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .rail-mark {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        margin-bottom: 8px;
+        border-radius: 10px;
+        background: var(--ink);
+        color: #fff;
+      }
+
+      .rail-btn {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        color: var(--ink-3);
+      }
+
+      .rail-btn.active {
+        color: var(--blue);
+        background: var(--blue-soft);
+      }
+
+      .rail-spacer {
+        flex: 1;
+      }
+
+      .page {
+        padding: 24px 28px 32px;
+      }
+
+      .page-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .page-head h4 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+
+      .page-head p {
+        margin: 6px 0 0;
+        color: var(--ink-2);
+        font-size: 12.5px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 32px;
+        padding: 0 12px;
+        border: 1px solid var(--border-strong);
+        border-radius: 999px;
+        background: var(--surface);
+        color: var(--ink);
+        font: 500 12px var(--ui);
+      }
+
+      .btn.primary {
+        border-color: var(--ink);
+        background: var(--ink);
+        color: #fff;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
+        gap: 14px;
+        align-items: start;
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+      }
+
+      .card-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 16px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .card-title {
+        font-size: 12.5px;
+        font-weight: 600;
+      }
+
+      .card-sub {
+        margin-top: 2px;
+        color: var(--ink-3);
+        font-size: 11px;
+      }
+
+      .card-body {
+        padding: 16px;
+      }
+
+      .stack {
+        display: grid;
+        gap: 14px;
+      }
+
+      .chat-screen {
+        padding: 26px 28px 32px;
+        background: var(--surface);
+      }
+
+      .user-bubble {
+        max-width: 620px;
+        margin-left: auto;
+        padding: 11px 14px;
+        border-radius: 14px;
+        background: var(--surface-2);
+        color: var(--ink);
+        font-size: 13px;
+      }
+
+      .answer {
+        max-width: 680px;
+        margin-top: 18px;
+        font-size: 13.5px;
+        line-height: 1.65;
+        color: var(--ink);
+      }
+
+      .answer p {
+        margin: 0 0 10px;
+      }
+
+      .cite {
+        color: var(--blue);
+        font-family: var(--mono);
+        font-size: 11px;
+        vertical-align: 1px;
+      }
+
+      .dark {
+        --ink: #f2f3f5;
+        --ink-2: #b3b9c4;
+        --ink-3: #858c99;
+        --surface: #16181d;
+        --surface-2: #1b1e24;
+        --surface-3: #23272f;
+        --border: rgba(255, 255, 255, 0.09);
+        --border-strong: rgba(255, 255, 255, 0.16);
+        --blue: #7b96ff;
+        --blue-soft: rgba(91, 120, 255, 0.16);
+        --pass: #4ade80;
+        --pass-soft: rgba(34, 197, 94, 0.13);
+        --fail: #f87171;
+        --fail-soft: rgba(239, 68, 68, 0.13);
+        --warn: #fbbf24;
+        --warn-soft: rgba(245, 158, 11, 0.14);
+        background: #0f1115;
+        color: var(--ink);
+        border-radius: var(--radius);
+        padding: 24px 26px;
+      }
+
+      .dark .card,
+      .dark .stat,
+      .dark .src,
+      .dark .page,
+      .dark .app-frame,
+      .dark .rail {
+        background: var(--surface);
+      }
+
+      .dark .app-frame {
+        background: #0f1115;
+      }
+
+      .rules {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .rules ul {
+        margin: 0;
+        padding-left: 16px;
+        color: var(--ink-2);
+        font-size: 12.5px;
+        line-height: 1.7;
+      }
+
+      .rules li::marker {
+        color: var(--ink-3);
+      }
+
+      .footer {
+        margin-top: 48px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        color: var(--ink-3);
+        font-size: 11.5px;
+        line-height: 1.6;
+      }
+
+      code {
+        padding: 1px 4px;
+        border-radius: 4px;
+        background: var(--surface-2);
+        font-family: var(--mono);
+        font-size: 0.92em;
+      }
+
+      @media (max-width: 1024px) {
+        .cols,
+        .rules {
+          grid-template-columns: 1fr;
+        }
+        .span-7,
+        .span-5,
+        .span-4,
+        .span-6,
+        .span-8 {
+          grid-column: span 12;
+        }
+        .stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .grid-2 {
+          grid-template-columns: 1fr;
+        }
+        .swatches {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="masthead">
+        <div>
+          <div class="brandline">
+            <span class="mark">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M12 3.6l2.35 6.05L20.4 12l-6.05 2.35L12 20.4l-2.35-6.05L3.6 12l6.05-2.35z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+            <span>stella</span>
+          </div>
+          <h1>Every answer, accounted for.</h1>
+          <p>
+            Design specification v0.1 — a chat-first quality workbench for DeepSeek assistants. The
+            conversation keeps chat-demo's calm, familiar surface; the workbench reads as an
+            observatory ledger: evidence, provenance and release decisions in one place.
+          </p>
+        </div>
+        <div class="meta">
+          <span>spec v0.1 · 2026-11-15</span>
+          <span>font: IBM Plex Sans / Mono</span>
+          <span>light + dark</span>
+          <span>sample data, not live metrics</span>
+        </div>
+      </header>
+
+      <section>
+        <div class="section-head">
+          <h2>Foundations</h2>
+          <span>Type, color, surface, rhythm</span>
+        </div>
+        <div class="cols">
+          <div class="panel">
+            <h3>Type</h3>
+            <p class="sub">
+              IBM Plex Sans for evidence and interface; IBM Plex Mono for every number, id, cost and
+              latency. Chat keeps the upstream system stack for familiarity.
+            </p>
+            <div class="type-row">
+              <div class="sample"><span class="display">Release review</span></div>
+              <span class="label">display 26/600</span>
+            </div>
+            <div class="type-row">
+              <div class="sample"><span class="title">Pass rate, 40 cases</span></div>
+              <span class="label">title 18/600</span>
+            </div>
+            <div class="type-row">
+              <div class="sample"><span class="body">Answers cite the exact passage they used.</span></div>
+              <span class="label">body 14/400</span>
+            </div>
+            <div class="type-row">
+              <div class="sample"><span class="label-s">Judge agreement</span></div>
+              <span class="label">label 12/500</span>
+            </div>
+            <div class="type-row">
+              <div class="sample"><span class="mono">$0.00058 · 1.9 s · 95% CI 54–79%</span></div>
+              <span class="label">data 12/400 mono</span>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Color</h3>
+            <p class="sub">
+              One blue accent for action and evidence. Green, red and amber are states only, never
+              decoration. Surfaces are cool neutral: no warm paper, no glow.
+            </p>
+            <div class="swatches">
+              <div class="swatch"><span class="chip" style="background:#3964fe"></span><span><span class="name">Accent</span><span class="hex">#3964FE</span></span></div>
+              <div class="swatch"><span class="chip" style="background:#0f1115"></span><span><span class="name">Ink</span><span class="hex">#0F1115</span></span></div>
+              <div class="swatch"><span class="chip" style="background:#15803d"></span><span><span class="name">Pass</span><span class="hex">#15803D</span></span></div>
+              <div class="swatch"><span class="chip" style="background:#b91c1c"></span><span><span class="name">Fail</span><span class="hex">#B91C1C</span></span></div>
+              <div class="swatch"><span class="chip" style="background:#b45309"></span><span><span class="name">Warn</span><span class="hex">#B45309</span></span></div>
+              <div class="swatch"><span class="chip" style="background:#f7f8fa"></span><span><span class="name">Surface 2</span><span class="hex">#F7F8FA</span></span></div>
+              <div class="swatch"><span class="chip" style="background:#eef1f6"></span><span><span class="name">Surface 3</span><span class="hex">#EEF1F6</span></span></div>
+              <div class="swatch"><span class="chip" style="background:rgba(15,17,21,.10)"></span><span><span class="name">Hairline</span><span class="hex">rgba(15,17,21,.10)</span></span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2>Components</h2>
+          <span>Verdict, signal bar, provenance, table</span>
+        </div>
+        <div class="component-grid">
+          <div class="span-7">
+            <div class="verdict">
+              <div class="eyebrow">Release review · support@1 · 40 cases</div>
+              <div class="headline">
+                <span class="badge fail"><span class="dot"></span>BLOCKED</span>
+                <span>Two regressions, one threshold miss</span>
+              </div>
+              <div class="why">
+                Citation validity is 0.82 against a 0.90 threshold. The stale-policy slice dropped
+                12 pp against baseline. Judge agreement is 82% over 24 seed labels.
+              </div>
+              <div class="bar" style="max-width:420px">
+                <div class="bar-track">
+                  <span class="bar-ci" style="left:54%;width:25%"></span>
+                  <span class="bar-threshold" style="left:85%"></span>
+                  <span class="bar-value" style="left:68%"></span>
+                </div>
+                <div class="bar-labels"><span>54%</span><span>95% CI · threshold 85%</span><span>79%</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="span-5">
+            <div class="panel" style="height:100%">
+              <h3>Badges</h3>
+              <p class="sub">Dot + word. Never color alone, never uppercase shouting.</p>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <span class="badge pass"><span class="dot"></span>Pass</span>
+                <span class="badge fail"><span class="dot"></span>Blocked</span>
+                <span class="badge warn"><span class="dot"></span>Advisory</span>
+                <span class="badge info">Gated</span>
+                <span class="badge neutral">Draft</span>
+                <span class="badge outline">Superseded</span>
+              </div>
+              <div style="margin-top:18px" class="prov">
+                <span class="src-chip">pricing-tiers.md › Annual plans</span>
+                <span class="src-chip">release-notes/2026-10.md</span>
+                <span class="src-chip">+1</span>
+                <span style="width:1px;height:12px;background:var(--border-strong)"></span>
+                <span class="mono">$0.00058</span>
+                <span class="mono">1.9 s</span>
+                <button class="prov-btn">Trace</button>
+                <button class="prov-btn pressed">Helpful</button>
+                <button class="prov-btn">Not quite</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="span-12">
+            <div class="stats">
+              <div class="stat"><div class="label">Pass rate</div><div class="value">68.0%</div><div class="foot"><span class="delta flat">+0.0 pp</span> · 95% CI 54–79%</div></div>
+              <div class="stat"><div class="label">Cost per passing answer</div><div class="value">$0.0012</div><div class="foot"><span class="delta flat">—</span> · off-peak</div></div>
+              <div class="stat"><div class="label">p95 latency</div><div class="value">2.4 s</div><div class="foot"><span class="delta flat">—</span> · 40 cases</div></div>
+              <div class="stat"><div class="label">Judge agreement</div><div class="value">82%</div><div class="foot">n=24 seed labels · advisory</div></div>
+            </div>
+          </div>
+
+          <div class="span-8">
+            <div class="card">
+              <div class="card-head">
+                <div><div class="card-title">Recent runs</div><div class="card-sub">Same suite, same judge version</div></div>
+                <button class="btn">Compare</button>
+              </div>
+              <div class="card-body" style="padding:0 16px">
+                <table>
+                  <thead><tr><th>Profile</th><th>Status</th><th class="num">Pass</th><th class="num">Cost</th><th class="num">p95</th></tr></thead>
+                  <tbody>
+                    <tr><td class="strong">Support baseline</td><td><span class="badge fail"><span class="dot"></span>Blocked</span></td><td class="num">68.0%</td><td class="num">$0.0012</td><td class="num">2.4 s</td></tr>
+                    <tr><td class="strong">Support grounded</td><td><span class="badge pass"><span class="dot"></span>Pass</span></td><td class="num">88.0%</td><td class="num">$0.0018</td><td class="num">2.7 s</td></tr>
+                    <tr><td class="strong">Support v2 prompt</td><td><span class="badge warn"><span class="dot"></span>Advisory</span></td><td class="num">71.0%</td><td class="num">$0.0013</td><td class="num">2.5 s</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="span-4">
+            <div class="stack">
+              <div class="src">
+                <div class="src-head"><span class="src-rank">1</span><span class="src-title">release-notes/2026-10.md</span></div>
+                <div class="src-meta">Policy v4.0 › Refund windows · page 1 · score 0.84</div>
+                <div class="src-text">Annual plans: full refund within 45 days of purchase; afterwards, a pro-rated credit minus one month.</div>
+              </div>
+              <div class="src">
+                <div class="src-head"><span class="src-rank">2</span><span class="src-title">policies/billing-refunds.md</span><span class="badge outline">Superseded</span></div>
+                <div class="src-meta">Refund windows · page 2 · score 0.79</div>
+                <div class="src-text">Annual plans: full refund within 30 days; 15% administration fee after day 30.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2>Quality, in place</h2>
+          <span>Rail + release board</span>
+        </div>
+        <div class="app-frame">
+          <nav class="rail" aria-label="Stella sections">
+            <span class="rail-mark">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.6l2.35 6.05L20.4 12l-6.05 2.35L12 20.4l-2.35-6.05L3.6 12l6.05-2.35z" fill="currentColor"/></svg>
+            </span>
+            <span class="rail-btn">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 15a3 3 0 0 1-3 3H9l-4 3v-6.2A6.8 6.8 0 0 1 4 10.5C4 6.9 7 4 10.8 4h2.4C17 4 20 6.9 20 10.5z"/></svg>
+            </span>
+            <span class="rail-btn active">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3.5 15.5h3l2.2-6 3.3 9 2.6-6h5.9"/></svg>
+            </span>
+            <span class="rail-btn">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h10M4 12h16M4 18h7"/></svg>
+            </span>
+            <span class="rail-btn">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="12" cy="5.5" rx="7" ry="2.8"/><path d="M5 5.5v6c0 1.55 3.13 2.8 7 2.8s7-1.25 7-2.8v-6"/></svg>
+            </span>
+            <span class="rail-btn">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.2"/><path d="M10 8.8l5 3.2-5 3.2z"/></svg>
+            </span>
+            <span class="rail-btn">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20l4.5-4.5M6.5 6.5l11 11M13 4l1.1 2.9L17 8l-2.9 1.1L13 12l-1.1-2.9L9 8l2.9-1.1z"/></svg>
+            </span>
+            <span class="rail-spacer"></span>
+            <span class="rail-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 8.96 4.6h.09A1.7 1.7 0 0 0 10 3.05V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.11 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.09A1.7 1.7 0 0 0 20.95 10H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg>
+            </span>
+          </nav>
+          <div class="page">
+            <div class="page-head">
+              <div>
+                <h4>Quality</h4>
+                <p>support@1 · 40 cases · published profile “Support baseline”</p>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button class="btn">Open chat</button>
+                <button class="btn primary">Run evaluation</button>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="verdict">
+                <div class="eyebrow">Release readiness</div>
+                <div class="headline"><span class="badge fail"><span class="dot"></span>BLOCKED</span><span>Citation validity 0.82 &lt; 0.90</span></div>
+                <div class="why">1 slice regressed, 7 failing cases. Judge agreement 82% over 24 seed labels — advisory, not a gate.</div>
+              </div>
+              <div class="stats">
+                <div class="stat"><div class="label">Pass rate</div><div class="value">68%</div><div class="foot">95% CI 54–79%</div></div>
+                <div class="stat"><div class="label">Cost / passing answer</div><div class="value">$0.0012</div><div class="foot">off-peak</div></div>
+                <div class="stat"><div class="label">p95 latency</div><div class="value">2.4 s</div><div class="foot">budget 8 s</div></div>
+                <div class="stat"><div class="label">Traces, 24 h</div><div class="value">126</div><div class="foot">3 need review</div></div>
+              </div>
+              <div class="grid-2">
+                <div class="card">
+                  <div class="card-head"><div><div class="card-title">Failing cases</div><div class="card-sub">Latest completed run</div></div><span class="badge neutral">7</span></div>
+                  <div class="card-body" style="padding:0 16px">
+                    <table>
+                      <thead><tr><th>Question</th><th>Slice</th><th>Failed</th></tr></thead>
+                      <tbody>
+                        <tr><td class="strong">Which regions support SAML SSO?</td><td>direct</td><td><span class="badge fail"><span class="dot"></span>must_contain</span></td></tr>
+                        <tr><td class="strong">Refund window for annual plans?</td><td>stale-policy</td><td><span class="badge fail"><span class="dot"></span>citation_valid</span></td></tr>
+                        <tr><td class="strong">How long are deleted exports retained?</td><td>stale-policy</td><td><span class="badge fail"><span class="dot"></span>citation_valid</span></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-head"><div><div class="card-title">Review queue</div><div class="card-sub">Thumbs-down traces</div></div></div>
+                  <div class="card-body stack" style="gap:10px">
+                    <div><div style="font-size:12px" class="strong">“Does the mobile app sync offline edits?”</div><div class="src-meta">2 sources · 1.7 s · down</div></div>
+                    <div><div style="font-size:12px" class="strong">“What’s the admin fee on a late refund?”</div><div class="src-meta">3 sources · 2.2 s · down</div></div>
+                    <div><div style="font-size:12px" class="strong">“Can I export to Parquet?”</div><div class="src-meta">0 sources · 1.1 s · down</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2>Chat carries its receipts</h2>
+          <span>Answer + provenance strip</span>
+        </div>
+        <div class="card">
+          <div class="chat-screen">
+            <div class="user-bubble">What’s the refund window for annual plans, and who approves exceptions?</div>
+            <div class="answer">
+              <p>
+                Annual plans can be refunded in full within <strong>45 days</strong> of purchase; after
+                that, a pro-rated credit is issued minus one month, per the current policy. Refunds
+                beyond 45 days and any pro-rated exceptions need approval from <strong>Finance
+                Operations</strong>; Support can open the request but cannot approve it.
+                <span class="cite">[1][2]</span>
+              </p>
+              <p>
+                The 30-day window and 15% administration fee shown in the older billing policy were
+                replaced by policy v4.0, effective 2026-11-01. <span class="cite">[3]</span>
+              </p>
+            </div>
+            <div class="prov" style="margin-top:16px">
+              <span class="src-chip">release-notes/2026-10.md › Policy v4.0</span>
+              <span class="src-chip">pricing-tiers.md › Annual plans</span>
+              <span class="src-chip">+1</span>
+              <span style="width:1px;height:12px;background:var(--border-strong)"></span>
+              <span class="mono">$0.00058</span>
+              <span class="mono">1.9 s</span>
+              <span>Support grounded</span>
+              <span style="width:1px;height:12px;background:var(--border-strong)"></span>
+              <button class="prov-btn">Trace</button>
+              <button class="prov-btn pressed">Helpful</button>
+              <button class="prov-btn">Not quite</button>
+              <button class="prov-btn">Make test case</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2>Dark mode</h2>
+          <span>Same hierarchy, states remain semantic</span>
+        </div>
+        <div class="dark">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head"><div><div class="card-title">Support grounded</div><div class="card-sub">support@1 · 40 cases · gate pass</div></div><span class="badge pass"><span class="dot"></span>PASS</span></div>
+              <div class="card-body">
+                <div class="bar">
+                  <div class="bar-track"><span class="bar-ci" style="left:74%;width:21%"></span><span class="bar-threshold" style="left:85%"></span><span class="bar-value" style="left:88%"></span></div>
+                  <div class="bar-labels"><span>74%</span><span>95% CI · threshold 85%</span><span>95%</span></div>
+                </div>
+                <div class="stats" style="grid-template-columns:repeat(2,1fr);margin-top:16px">
+                  <div class="stat"><div class="label">Pass rate</div><div class="value">88.0%</div><div class="foot"><span class="delta good">+20.0 pp</span> vs baseline</div></div>
+                  <div class="stat"><div class="label">Cost / pass</div><div class="value">$0.0018</div><div class="foot"><span class="delta bad">+50%</span> within budget</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div><div class="card-title">Slices</div><div class="card-sub">n ≥ 5 shown; small n is advisory</div></div></div>
+              <div class="card-body stack" style="gap:12px">
+                <div><div class="bar-labels" style="margin-bottom:6px"><span>stale-policy</span><span>n=5</span><span>60% → 80%</span></div><div class="bar-track"><span class="bar-value" style="left:80%"></span><span class="bar-threshold" style="left:85%"></span></div></div>
+                <div><div class="bar-labels" style="margin-bottom:6px"><span>citations</span><span>n=4</span><span>75% → 100%</span></div><div class="bar-track"><span class="bar-value" style="left:100%"></span><span class="bar-threshold" style="left:85%"></span></div></div>
+                <div><div class="bar-labels" style="margin-bottom:6px"><span>unanswerable</span><span>n=6</span><span>83% → 100%</span></div><div class="bar-track"><span class="bar-value" style="left:100%"></span><span class="bar-threshold" style="left:85%"></span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2>Rules of the house</h2>
+          <span>For every new page</span>
+        </div>
+        <div class="rules">
+          <div class="panel">
+            <h3>Do</h3>
+            <ul>
+              <li>Let evidence set the hierarchy: verdict, then numbers, then cases.</li>
+              <li>Use mono for every number, id, cost and timestamp.</li>
+              <li>Show uncertainty: CIs, sample sizes, judge agreement, drift.</li>
+              <li>Make every row a way in — click through to the case or trace.</li>
+              <li>Use real empty states with the next action, not decorative illustrations.</li>
+              <li>Keep the chat surface calm; provenance is one line, not a dashboard.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Don't</h3>
+            <ul>
+              <li>No gradients, glass, glow, emoji icons or sparkle decoration.</li>
+              <li>No all-caps labels, 01/02/03 sequences, left color bars or pill overload.</li>
+              <li>No single “quality score” without its interval and sample size.</li>
+              <li>No fabricated fine-tune wins, customer logos, testimonials or benchmarks.</li>
+              <li>No warm-cream/serif default; Stella is an instrument, not stationery.</li>
+              <li>No color-only status; pair the dot with a word.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer">
+        Sample data for design specification only. Product screens read live SQLite data through
+        `/api`; replay mode labels recorded results explicitly. Type: IBM Plex Sans/Mono (OFL).
+        Stella is a fork of chat-demo (MIT, DeepSeek); see <code>UPSTREAM.md</code> and
+        <code>NOTICE</code>.
+      </div>
+    </div>
+  </body>
+</html>
