@@ -89,5 +89,24 @@ export const createConfig = ({
   devServer: { port: 8090, ...devServer },
 })
 
+const config = createConfig({
+  // Same-origin: the Stella server serves dist/ and proxies the DeepSeek API,
+  // so the chat client needs no absolute API origin and no CORS.
+  apiOrigin: '',
+  devServer: {
+    proxy: [
+      {
+        context: ['/api', '/models', '/anthropic', '/v1'],
+        target: 'http://127.0.0.1:8787',
+      },
+    ],
+  },
+})
+
+config.plugins = [
+  ...(config.plugins ?? []),
+  new rspack.DefinePlugin({ __STELLA__: JSON.stringify(true) }),
+]
+
 // eslint-disable-next-line import/no-default-export
-export default defineConfig(createConfig())
+export default defineConfig(config)

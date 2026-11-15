@@ -1,24 +1,47 @@
 {
-  "name": "chat-demo",
-  "version": "0.1.1",
-  "description": "基于 DeepSeek API 的静态聊天示例。",
+  "name": "stella",
+  "version": "0.1.0",
+  "description": "Stella — a chat-first, local-first RAG, evaluation and fine-tuning workbench for DeepSeek assistants.",
   "license": "MIT",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "bin": {
+    "stella": "bin/stella"
+  },
   "scripts": {
-    "dev": "rspack serve -c rspack.config.ts",
+    "dev": "node scripts/dev.mjs",
+    "dev:server": "node --watch server/src/index.ts",
+    "dev:app": "rspack serve -c rspack.config.ts",
     "build": "rm -rf dist && NODE_ENV=production rspack build -c rspack.config.ts",
-    "type": "tsc -p tsconfig.json",
-    "lint": "oxlint src rspack.config.ts",
-    "format": "oxfmt --write ."
+    "start": "node server/src/index.ts",
+    "type": "tsc -p tsconfig.json && tsc -p tsconfig.server.json",
+    "lint": "oxlint src server shared scripts rspack.config.ts",
+    "format": "oxfmt --write .",
+    "test": "node scripts/run-tests.mjs",
+    "test:ui": "vitest run",
+    "test:all": "pnpm test && pnpm test:ui",
+    "seed": "node server/src/cli/index.ts seed",
+    "demo": "node server/src/cli/index.ts demo",
+    "demo:replay": "STELLA_MODE=replay node server/src/cli/index.ts demo --replay",
+    "doctor": "node server/src/cli/index.ts doctor",
+    "gate": "node server/src/cli/index.ts gate"
   },
   "dependencies": {
+    "@fastify/multipart": "10.1.8",
+    "@fastify/static": "10.1.11",
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/ibm-plex-sans": "5.3.0",
     "@types/katex": "^0.16.5",
     "@types/mdast": "~4.0.3",
     "@types/prismjs": "^1.26.1",
     "@types/react": "~18.3.1",
     "@types/react-dom": "~18.3.0",
+    "ajv": "8.20.0",
     "clsx": "2.1.1",
+    "fastify": "5.12.8",
     "fflate": "0.8.3",
     "idb": "8.0.3",
     "katex": "0.16.22",
@@ -29,6 +52,7 @@
     "mermaid": "11.10.1",
     "micromark-extension-gfm": "3.0.0",
     "micromark-extension-llm-math": "3.1.0",
+    "node-html-parser": "9.0.7",
     "prismjs": "1.30.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -39,9 +63,15 @@
     "@rspack/core": "2.0.2",
     "@rspack/dev-server": "2.0.1",
     "@swc/helpers": "0.5.23",
-    "@types/node": "~20.9.2",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.10",
+    "@types/node": "^24.0.0",
+    "jsdom": "31.0.1",
     "oxfmt": "0.48.0",
     "oxlint": "1.63.0",
-    "typescript": "7.0.2"
+    "playwright-core": "1.65.1",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
   }
 }

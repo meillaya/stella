@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Stella CLI entry point. Usage: ./bin/stella <command>
+set -eu
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+exec node "$ROOT/server/src/cli/index.ts" "$@"

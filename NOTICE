@@ -1,0 +1,11 @@
+Stella
+Copyright (c) 2026 Stella contributors
+
+This product includes software derived from chat-demo
+(https://github.com/deepseek-ai/chat-demo), Copyright (c) 2026 DeepSeek,
+licensed under the MIT License. The original license text is retained in
+LICENSE, and the upstream commit is recorded in UPSTREAM.md.
+
+Bundled fonts:
+- IBM Plex Sans and IBM Plex Mono, Copyright (c) IBM Corp.,
+  licensed under the SIL Open Font License 1.1.

@@ -1,75 +1,59 @@
-# chat-demo
+# Stella
 
-English | [简体中文](README.zh-CN.md)
+**Every answer, accounted for.**
 
-A static chat demo powered by the DeepSeek API. No application backend is required: the browser connects directly to the configured API service.
+Stella is a local-first, chat-first workbench for teams shipping DeepSeek-powered assistants. It starts from DeepSeek's open-source [chat-demo](https://github.com/deepseek-ai/chat-demo) and turns it into a quality loop: **capture real chats → curate datasets → evaluate retrieval and answers → improve the profile → gate the release**, with a validated fine-tuning data pipeline and an honest account of what DeepSeek does and does not offer.
 
-You can [try the app online](https://deepseek-ai.github.io/chat-demo/) or download the archive from [Releases](https://github.com/deepseek-ai/deepseek-chat-demo/releases), extract it, and double-click `index.html` to use it locally without installation or a build. Enter your API key in Settings before your first chat.
+> Status: early `v0.1.0`. The app, gateway, retrieval, evaluation and release-gate loop are under active construction.
 
-## Getting started
+## Why this exists
 
-Install Node.js 22.12+ and pnpm, then run:
+- DeepSeek's API has **no embeddings and no fine-tuning endpoints**; the useful work is retrieval, evidence, evaluation and data curation, not another model API wrapper.
+- Teams evaluating assistants still stitch four tools together: traces in one product, cases in a spreadsheet, evaluation in a CLI, prompts in git, and a gate in CI. Stella makes trace → case → decision one artifact.
+- Chat UIs and quality dashboards are usually different products. Stella's chat carries its own receipts: sources, cost, latency, trace and feedback attach to every answer.
 
-```sh
-git clone https://github.com/deepseek-ai/chat-demo.git
-cd chat-demo
+## Quickstart
+
+Requirements: **Node 24+** and **pnpm 11+**. No Python, Docker or cluster is required.
+
+```bash
 pnpm install
-pnpm dev
+cp .env.example .env.local        # add DEEPSEEK_API_KEY for live mode
+pnpm seed                         # create the demo collection and dataset
+pnpm dev                          # server :8787, app :8090
 ```
 
-Open http://localhost:8090.
+Open http://127.0.0.1:8090 for the dev server, or:
 
-To build the static site:
-
-```sh
+```bash
 pnpm build
+pnpm start                        # serves the app and API on http://127.0.0.1:8787
 ```
 
-The output is written to `dist/`. Deploy it to a static web server or open `dist/index.html` directly. Opening the file directly requires browser support for storage on `file://` pages and an API service that permits their cross-origin requests.
+Without a key Stella runs in replay/offline mode: traces, datasets and recorded evaluation results remain inspectable, but new model calls fail with an actionable message.
 
-## Features
+## The loop
 
-- Multiple conversations with automatic titles, renaming, and deletion; edit prompts, regenerate replies, and switch between message branches.
-- Streaming replies, deep thinking, smart search, link reading, and source citations; stop generation or continue eligible replies.
-- Upload, paste, or drag and drop attachments; use voice input and read replies aloud. A live audio spectrum appears in the first row of the input area while recording on mobile.
-- Markdown, syntax highlighting, KaTeX math, and Mermaid diagrams.
-- Simplified Chinese and English, light and dark themes, mobile layouts, location settings, and chat history import and export.
+1. **Capture** — the gateway in front of `api.deepseek.com` records every request/response, usage, cost, latency and retrieved source.
+2. **Curate** — promote any assistant answer (and its sources) to a versioned JSONL test case.
+3. **Evaluate** — retrieval metrics, deterministic assertions and a rubric judge with visible calibration; cost per successful answer; per-slice regressions.
+4. **Improve** — versioned profiles (model, prompt, retrieval k/rerank/context budget), run comparisons and sweeps.
+5. **Gate** — configurable thresholds and regression guards, CI exit codes and a release review artifact (Markdown, JSON, self-contained HTML).
+6. **Fine-tune data** — deduplicated, redacted, split SFT/DPO exports with provenance and contamination checks; DeepSeek training is explicitly marked unavailable, with plans for Unsloth, Axolotl, Together or an OpenAI-compatible endpoint.
 
-## Data and storage
+## Stack
 
-Your API key and settings are stored in the browser's localStorage. Conversations and original attachments are stored in IndexedDB. Local data is isolated by browser profile and site origin. Sending messages, uploading attachments, and using speech features sends the relevant content to the configured API service.
+TypeScript on Node 24, Fastify gateway, SQLite (`node:sqlite`, FTS5), React 18 + rspack (the chat-demo fork), Playwright for visual checks. One package, one SQLite file, no external services.
 
-History import and export in Settings use ZIP archives. After confirmation and successful validation, importing replaces all local conversations and attachments. Exports include conversations and locally available original images, but exclude API keys, settings, and original non-image attachments. See the [history import/export documentation (Chinese)](src/services/chat/history/README.md) for the archive format and preservation details.
+## Documentation
 
-Settings → Data → Delete all chats clears all local conversations, original attachments, and unsent drafts after confirmation. It stops ongoing replies and returns to a new chat. Your API key and settings are preserved; files already uploaded to the API service are not deleted.
+- [`docs/product-facts.md`](docs/product-facts.md) — verified DeepSeek/chat-demo facts and sources
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — components, data flow, decisions
+- [`docs/EVALS.md`](docs/EVALS.md) — metrics, judge design, gates
+- [`docs/FINETUNE.md`](docs/FINETUNE.md) — data pipeline and honest limits
+- [`UPSTREAM.md`](UPSTREAM.md) — chat-demo fork provenance and sync policy
+- [`docs/RESEARCH.md`](docs/RESEARCH.md) — landscape research and why this shape
 
-## Development
+## License and attribution
 
-| Command       | Description                  |
-| ------------- | ---------------------------- |
-| `pnpm dev`    | Start the development server |
-| `pnpm build`  | Build into `dist/`           |
-| `pnpm type`   | Run TypeScript type checks   |
-| `pnpm lint`   | Lint with oxlint             |
-| `pnpm format` | Format with oxfmt            |
-
-[rspack.config.ts](rspack.config.ts) uses `https://api.deepseek.com` by default. Use `createConfig({ apiOrigin, devServer })` to customize the API origin and development server proxy.
-
-Chat uses `deepseek-flash` by default through Anthropic-compatible Messages / Files APIs. Speech features use ASR / TTS endpoints. Requests include extensions for search, link reading, titles, and `latest_reminder`, so the configured service must support the corresponding capabilities. Supported attachment formats are determined by server-side validation.
-
-```text
-src/
-  app/                 Application layout, themes, and global styles
-  components/          Chat, settings, Markdown, and other UI components
-  i18n/                English and Chinese translations
-  services/
-    api/               API requests, SSE, and protocol types
-    chat/              Conversations, message branches, storage, and history import/export
-    markdown/          Markdown parsing, syntax highlighting, and diagrams
-    speech/            Audio recording and read-aloud playback
-  utils/               Shared utilities
-```
-
-## License
-
-[MIT](LICENSE). The build copies the license to `dist/LICENSE`; include it when distributing the app. Third-party dependencies are subject to their own licenses.
+MIT. Stella is derived from [deepseek-ai/chat-demo](https://github.com/deepseek-ai/chat-demo), Copyright (c) 2026 DeepSeek, also MIT. See [`LICENSE`](LICENSE), [`NOTICE`](NOTICE) and [`UPSTREAM.md`](UPSTREAM.md).

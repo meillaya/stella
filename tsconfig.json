@@ -7,6 +7,7 @@
     "jsx": "react-jsx",
     "noEmit": true,
     "isolatedModules": true,
+    "allowImportingTsExtensions": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "types": ["node"],
     "allowSyntheticDefaultImports": true,
@@ -18,5 +19,5 @@
     "noImplicitReturns": true,
     "useUnknownInCatchVariables": true
   },
-  "include": ["src", "rspack.config.ts"]
+  "include": ["src", "rspack.config.ts", "vitest.config.ts"]
 }
