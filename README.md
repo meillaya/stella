@@ -1,7 +1,5 @@
 # Stella
 
-[![CI](https://github.com/Meillaya/stella/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Meillaya/stella/actions/workflows/ci.yml)
-
 **Every answer, accounted for.**
 
 Stella is a local-first, chat-first workbench for teams shipping DeepSeek-powered assistants. It starts from DeepSeek's open-source [chat-demo](https://github.com/deepseek-ai/chat-demo) and turns it into a quality loop: **capture real chats → curate datasets → evaluate retrieval and answers → improve the profile → gate the release**, with a validated fine-tuning data pipeline and an honest account of what DeepSeek does and does not offer.
@@ -65,6 +63,21 @@ Without a key Stella runs in replay/offline mode: traces, datasets and recorded 
 4. **Improve** — versioned profiles (model, prompt, retrieval k/rerank/context budget), run comparisons and sweeps.
 5. **Gate** — configurable thresholds and regression guards, CI exit codes and a release review artifact (Markdown, JSON, self-contained HTML).
 6. **Fine-tune data** — deduplicated, redacted, split SFT/DPO exports with provenance and contamination checks; DeepSeek training is explicitly marked unavailable, with plans for Unsloth, Axolotl, Together or an OpenAI-compatible endpoint.
+
+## CI
+
+The GitHub Actions workflow is staged at [`docs/ci.yml`](docs/ci.yml). GitHub
+blocks pushes of workflow files for tokens without the `workflow` scope; after
+granting it, activate CI with:
+
+```bash
+mkdir -p .github/workflows
+git mv docs/ci.yml .github/workflows/ci.yml
+git commit -m "Enable CI"
+git push
+```
+
+The same checks run locally with `pnpm type && pnpm lint && pnpm test && pnpm test:ui && pnpm build`.
 
 ## Stack
 

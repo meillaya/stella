@@ -50,6 +50,7 @@ pnpm type        # app + server tsc
 pnpm test        # node:test server tests (no live calls)
 pnpm test:ui     # vitest + jsdom
 pnpm build       # rspack production build
+# CI workflow: docs/ci.yml (move to .github/workflows after granting workflow scope)
 ```
 
 Tests must not call the live API. Use fixtures/mock upstreams and ephemeral
