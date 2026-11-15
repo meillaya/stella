@@ -1,0 +1,19 @@
+{
+  "cassette": "synthetic-smoke-001",
+  "synthetic": true,
+  "excludeFromQualityClaims": true,
+  "recordedAt": "2026-11-15T00:00:00Z",
+  "recordedBy": "hand-written fixture (not a model recording)",
+  "gitSha": "0000000000000000000000000000000000000000",
+  "stellaVersion": "0.1.0",
+  "model": "deepseek-flash",
+  "profile": "Support baseline",
+  "profileId": "prof_synthetic_smoke",
+  "profileHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "dataset": "support",
+  "datasetVersion": 1,
+  "corpus": "corpus/meridian",
+  "mode": "synthetic",
+  "caseCount": 1,
+  "note": "Hand-written synthetic fixture for replay mechanics only. It contains no recorded model output and must never be used for quality, accuracy, cost, latency, or model-behaviour claims."
+}

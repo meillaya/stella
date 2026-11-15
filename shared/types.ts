@@ -62,6 +62,8 @@ export type Trace = {
   response: TraceResponse
   sources: SourceRef[]
   injectedContext: string | null
+  /** Set when retrieval was attempted but failed; chat continued without sources. */
+  retrievalError: string | null
   error: string | null
   feedback: Feedback | null
   annotation: string | null

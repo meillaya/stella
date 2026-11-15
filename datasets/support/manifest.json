@@ -1,0 +1,24 @@
+{
+  "datasetId": "ds_de169574ed254dc6a9f5",
+  "name": "support",
+  "slug": "support",
+  "description": "Meridian support gold evaluation suite",
+  "corpusVersion": "sha256:62c4bd47619bf57b839b8c77d5bd788b584f6444f59529fdc88901d1bc72780a",
+  "updatedAt": 1794736842113,
+  "versions": [
+    {
+      "version": 1,
+      "path": "datasets/support/0001.jsonl",
+      "contentHash": "sha256:2013f756c6e62d762c21871a02b0703f38196d3a39f3c1c82f766c36f87f75d2",
+      "caseCount": 40,
+      "notes": "demo seed",
+      "createdAt": 1794736842113,
+      "anchorStatus": {
+        "resolved": 44,
+        "total": 44,
+        "missing": []
+      },
+      "corpusVersion": "sha256:62c4bd47619bf57b839b8c77d5bd788b584f6444f59529fdc88901d1bc72780a"
+    }
+  ]
+}

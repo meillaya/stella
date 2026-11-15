@@ -44,7 +44,7 @@ export const asModelId = (value: unknown): ModelId =>
 export const isPeak = (timestamp = Date.now()): boolean => {
   const date = new Date(timestamp)
   const day = date.getUTCDay()
-  if (day === 0 || day === 6) return false
+  if (day === 0 || day === 6) {return false}
   const hour = date.getUTCHours()
   return (hour >= 1 && hour < 4) || (hour >= 6 && hour < 10)
 }
@@ -90,17 +90,17 @@ export const estimateTokens = (text: string): number => {
   let other = 0
   for (const char of text) {
     const code = char.codePointAt(0) ?? 0
-    if (code >= 0x2e80 && code <= 0x9fff) cjk += 1
-    else other += 1
+    if (code >= 0x2e80 && code <= 0x9fff) {cjk += 1}
+    else {other += 1}
   }
   return Math.ceil(other * 0.3 + cjk * 0.6)
 }
 
 export const formatUsd = (value: number | null | undefined): string => {
-  if (value == null || !Number.isFinite(value)) return '—'
-  if (value === 0) return '$0'
-  if (value < 0.01) return `$${value.toFixed(5)}`
-  if (value < 1) return `$${value.toFixed(4)}`
+  if (value == null || !Number.isFinite(value)) {return '—'}
+  if (value === 0) {return '$0'}
+  if (value < 0.01) {return `$${value.toFixed(5)}`}
+  if (value < 1) {return `$${value.toFixed(4)}`}
   return `$${value.toFixed(2)}`
 }
 

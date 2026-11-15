@@ -30,7 +30,7 @@ export const buildServer = async (): Promise<FastifyInstance> => {
   // Loopback is the default, trusted deployment. If Stella is exposed on a
   // network interface, require an explicit access token.
   app.addHook('onRequest', async (request, reply) => {
-    if (!config.accessToken || isLoopback(request.ip)) return
+    if (!config.accessToken || isLoopback(request.ip)) {return}
     const header = request.headers.authorization
     const token =
       typeof header === 'string' && header.startsWith('Bearer ') ? header.slice('Bearer '.length) : ''

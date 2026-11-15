@@ -20,6 +20,19 @@
   min-height: 0;
 }
 
+/* Workbench route: the page scrolls inside the content area, beneath the
+   mobile section nav. Chat keeps the plain upstream layout. */
+.workbench {
+  display: flex;
+  flex-direction: column;
+}
+
+.workbenchBody {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
 .saveError {
   display: flex;
   align-items: center;

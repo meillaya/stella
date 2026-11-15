@@ -1,0 +1,167 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 auto;
+  gap: 5px;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 168px;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 16px;
+  background-color: transparent;
+  color: var(--dsw-alias-label-secondary);
+  font: inherit;
+  font-size: 12px;
+  line-height: 18px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--ds-transition-duration) var(--ds-ease-in-out),
+    color var(--ds-transition-duration) var(--ds-ease-in-out);
+
+  &:hover {
+    background-color: var(--dsw-alias-interactive-bg-hover);
+    color: var(--dsw-alias-label-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--dsw-alias-brand-primary);
+    outline-offset: 1px;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* On the narrowest phones the composer has no room for a name; keep a clean
+   icon-only chip with the full profile name preserved as its accessible label. */
+@media (max-width: 359px) {
+  .chip {
+    flex: 0 0 30px;
+    justify-content: center;
+    width: 30px;
+    max-width: 30px;
+    padding: 0;
+  }
+
+  .label {
+    display: none;
+  }
+}
+
+.dialog {
+  display: grid;
+  gap: 12px;
+  font-family: var(--st-font-ui);
+}
+
+.note {
+  margin: 0;
+  color: var(--st-ink-2);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.hint {
+  color: var(--st-ink-3);
+  font-size: 12px;
+}
+
+.unavailable {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--st-ink-2);
+  font-size: 12px;
+}
+
+.retry {
+  height: 26px;
+  padding: 0 9px;
+  border: 1px solid var(--st-border);
+  border-radius: var(--st-radius-pill);
+  background: transparent;
+  color: var(--st-blue);
+  font-family: var(--st-font-ui);
+  font-size: 11.5px;
+  cursor: pointer;
+}
+
+.retry:hover {
+  border-color: var(--st-blue);
+}
+
+.retry:focus-visible {
+  outline: 2px solid var(--st-blue);
+  outline-offset: 2px;
+}
+
+.options {
+  display: grid;
+  gap: 6px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  box-sizing: border-box;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid var(--st-border);
+  border-radius: var(--st-radius-sm);
+  background: var(--st-surface);
+  color: var(--st-ink);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--st-surface-2);
+}
+
+.option:focus-within {
+  outline: 2px solid var(--st-blue);
+  outline-offset: 1px;
+}
+
+.optionActive {
+  border-color: var(--st-blue);
+  background: var(--st-blue-soft);
+}
+
+.option input {
+  flex-shrink: 0;
+  margin: 0;
+  accent-color: var(--st-blue);
+}
+
+.optionName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.optionMeta {
+  margin-left: auto;
+  color: var(--st-ink-3);
+  font-family: var(--st-font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.failed {
+  color: var(--st-fail);
+  font-size: 12px;
+}

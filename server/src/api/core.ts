@@ -108,11 +108,11 @@ const rowToTraceSummary = (row: TraceRow): TraceSummary => {
 }
 
 const messageText = (content: unknown): string => {
-  if (typeof content === 'string') return content
+  if (typeof content === 'string') {return content}
   if (Array.isArray(content)) {
     return content
       .map((block) => {
-        if (block && typeof block === 'object' && 'text' in block && typeof block.text === 'string') return block.text
+        if (block && typeof block === 'object' && 'text' in block && typeof block.text === 'string') {return block.text}
         return ''
       })
       .join(' ')
@@ -122,11 +122,11 @@ const messageText = (content: unknown): string => {
 
 export const activeProfile = (): Profile | null => {
   const id = getSetting('active_profile_id')
-  if (!id) return null
+  if (!id) {return null}
   const row = getDb().prepare('SELECT * FROM profiles WHERE id = ?').get(id) as
     | { id: string; name: string; version: number; parent_id: string | null; spec_json: string; created_at: number; published_at: number | null }
     | undefined
-  if (!row) return null
+  if (!row) {return null}
   return {
     id: row.id,
     name: row.name,
@@ -155,7 +155,7 @@ const latestGate = (): Gate | null => {
         created_at: number
       }
     | undefined
-  if (!row) return null
+  if (!row) {return null}
   return {
     id: row.id,
     baselineRunId: row.baseline_run_id,
@@ -246,7 +246,10 @@ const overview = (): Overview => {
     gate: latestGate(),
     metrics: {
       passRate: summary?.passRate ?? null,
-      passRateDeltaPp: delta(summary?.passRate, previousSummary?.passRate),
+      passRateDeltaPp:
+        delta(summary?.passRate, previousSummary?.passRate) === null
+          ? null
+          : (delta(summary?.passRate, previousSummary?.passRate) as number) * 100,
       costPerPassUsd: summary?.costPerPassUsd ?? null,
       costDeltaPct: pct(summary?.costPerPassUsd, previousSummary?.costPerPassUsd),
       p95LatencyMs: summary?.p95LatencyMs ?? null,
@@ -273,10 +276,10 @@ export const registerCoreApi = (app: FastifyInstance): void => {
     if (body.activeProfileId !== undefined) {
       if (body.activeProfileId !== null) {
         const exists = getDb().prepare('SELECT id FROM profiles WHERE id = ?').get(body.activeProfileId)
-        if (!exists) return reply.code(400).send({ error: { message: 'Unknown profile' } })
+        if (!exists) {return reply.code(400).send({ error: { message: 'Unknown profile' } })}
       }
-      if (body.activeProfileId === null) deleteSetting('active_profile_id')
-      else setSetting('active_profile_id', body.activeProfileId)
+      if (body.activeProfileId === null) {deleteSetting('active_profile_id')}
+      else {setSetting('active_profile_id', body.activeProfileId)}
     }
     if (body.traceRetentionDays !== undefined) {
       if (!Number.isFinite(body.traceRetentionDays) || body.traceRetentionDays < 1 || body.traceRetentionDays > 365) {
@@ -284,7 +287,7 @@ export const registerCoreApi = (app: FastifyInstance): void => {
       }
       setSetting('trace_retention_days', String(Math.floor(body.traceRetentionDays)))
     }
-    if (body.defaultModel !== undefined) setSetting('default_model', asModelId(body.defaultModel))
+    if (body.defaultModel !== undefined) {setSetting('default_model', asModelId(body.defaultModel))}
     return readSettings()
   })
 

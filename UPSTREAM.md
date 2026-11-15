@@ -29,14 +29,18 @@ Keep this list current. Prefer new files and small, documented edits.
 | `README.md` | Replaced with Stella documentation. |
 | `README.zh-CN.md` | Removed; Stella documentation will be maintained in one place. |
 | `.github/workflows/pages.yml` | Removed; replaced by Stella CI. |
+| `src/app/App.tsx`, `src/app/App.module.css` | Stella rail, route-aware chat/workbench shell, mobile workbench nav. |
+| `src/components/sider/Sider.tsx` | Stella wordmark and mode-aware session sider. |
+| `src/components/messages/AssistantMessage.tsx` | Mounts the provenance strip after the answer. |
+| `src/components/chatInput/ChatInput.tsx` + CSS | Mounts the active-profile chip. |
+| `src/components/settings/SettingsDialog.tsx`, `Settings.module.css`, `settingsDialogState.ts`, `ApiKeyField.tsx` | Third “Stella” tab: gateway key status, active profile, retention; gateway placeholder hint. |
+| `src/services/settings.ts` | Gateway builds default the key to `stella-local`; BYOK onboarding preserved. |
+| `src/services/api/types.ts` | `MessageUsage` gains the `lantern_*` provenance fields. |
+| `src/i18n/en.ts`, `src/i18n/zh.ts` | Stella product strings (sunset demo framing), key parity maintained. |
 
-Files expected to change during the build (tracked here as they land):
-`src/app/App.tsx`, `src/components/sider/Sider.tsx`,
-`src/components/messages/AssistantMessage.tsx`,
-`src/components/chatInput/ChatInput.tsx`,
-`src/components/settings/SettingsDialog.tsx`, `src/services/settings.ts`,
-`src/services/api/types.ts`, `src/i18n/en.ts`, `src/i18n/zh.ts`,
-`src/app/theme.css`.
+Stella-only code that must not be copied upstream: `src/stella/**`,
+`server/**`, `shared/**`, `design/**`, `corpus/**`, `datasets/**`,
+`scripts/**`.
 
 ## Sync policy
 

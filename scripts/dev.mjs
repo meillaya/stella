@@ -24,7 +24,7 @@ const run = (label, command, args, env = {}) => {
 
 let stopping = false
 const stop = (code = 0) => {
-  if (stopping) return
+  if (stopping) {return}
   stopping = true
   for (const child of children) {
     child.kill('SIGTERM')

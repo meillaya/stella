@@ -1,0 +1,112 @@
+.rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 52px;
+  box-sizing: border-box;
+  width: 52px;
+  height: 100%;
+  padding: 10px 0 12px;
+  border-right: 1px solid var(--st-border);
+  background: var(--st-surface);
+  z-index: 3;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.mobileNav {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  height: 46px;
+  border-bottom: 1px solid var(--st-border);
+  background: var(--st-surface);
+  font-family: var(--st-font-ui);
+  z-index: 3;
+}
+
+.mobileNavScroll {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.mobileNavItem {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 0 14px;
+  color: var(--st-ink-3);
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mobileNavItem:hover {
+  color: var(--st-ink);
+}
+
+.mobileNavItem:focus-visible {
+  outline: 2px solid var(--st-blue);
+  outline-offset: -2px;
+}
+
+.mobileNavItemActive {
+  color: var(--st-blue);
+}
+
+.mobileNavItemActive::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  bottom: 0;
+  left: 12px;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--st-blue);
+}
+
+.mobileNavRule {
+  flex-shrink: 0;
+  width: 1px;
+  margin: 12px 0;
+  background: var(--st-border);
+}
+
+.mobileNavSettings {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--st-ink-3);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.mobileNavSettings:hover {
+  color: var(--st-ink);
+  background: var(--st-surface-2);
+}
+
+.mobileNavSettings[aria-current='page'] {
+  color: var(--st-blue);
+}
+
+.mobileNavSettings:focus-visible {
+  outline: 2px solid var(--st-blue);
+  outline-offset: -2px;
+}

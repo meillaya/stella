@@ -101,6 +101,7 @@ CREATE TABLE IF NOT EXISTS traces (
   request_json TEXT NOT NULL DEFAULT '{}',
   response_json TEXT NOT NULL DEFAULT '{}',
   injected_context TEXT,
+  retrieval_error TEXT,
   error TEXT,
   feedback TEXT,
   annotation TEXT

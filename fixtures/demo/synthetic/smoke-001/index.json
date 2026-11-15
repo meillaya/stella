@@ -1,0 +1,11 @@
+{
+  "cassette": "synthetic-smoke-001",
+  "synthetic": true,
+  "events": [
+    {
+      "caseId": "synthetic-smoke-001",
+      "key": "sha256:5a060795833b0cd6a09d16e6d6132eadf44eab7032c6bed79575fb62d04b0073",
+      "seq": 1
+    }
+  ]
+}

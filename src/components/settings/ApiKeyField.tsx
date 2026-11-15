@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { IconEditOutline16 } from '../base/icons.js'
-import { useSettings } from '../../services/settings.js'
+import { GATEWAY_API_KEY, useSettings } from '../../services/settings.js'
 import { useIsMobile } from '../../app/viewport.js'
 import { IconButton } from '../base/IconButton.js'
 import { useApiKeyForm } from './useApiKeyForm.js'
@@ -77,6 +77,9 @@ export const ApiKeyField = ({ editor }: { editor: ApiKeyEditor }) => {
             ) : null}
           </div>
         )}
+        {apiKey === GATEWAY_API_KEY ? (
+          <div className={styles.description}>{t('stellaApiKeyHint')}</div>
+        ) : null}
         {showInput && form.error ? <div className={styles.error}>{form.error}</div> : null}
       </div>
     </div>

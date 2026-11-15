@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export class ApiError extends Error {
   readonly status: number
@@ -17,7 +17,7 @@ const parseError = async (response: Response): Promise<ApiError> => {
   let code: string | undefined
   try {
     const body = (await response.json()) as { error?: { message?: string; code?: string } }
-    if (body.error?.message) message = body.error.message
+    if (body.error?.message) {message = body.error.message}
     code = body.error?.code
   } catch {
     // Keep the status text when the body is not JSON.
@@ -35,10 +35,10 @@ const request = async <T>(path: string, init: RequestInit = {}): Promise<T> => {
       ...init.headers,
     },
   })
-  if (!response.ok) throw await parseError(response)
-  if (response.status === 204) return undefined as T
+  if (!response.ok) {throw await parseError(response)}
+  if (response.status === 204) {return undefined as T}
   const type = response.headers.get('content-type') ?? ''
-  if (!type.includes('application/json')) return (await response.text()) as T
+  if (!type.includes('application/json')) {return (await response.text()) as T}
   return (await response.json()) as T
 }
 
@@ -88,7 +88,7 @@ export const useApi = <T>(path: string | null, options: { pollMs?: number } = {}
         setLoading(false)
       })
       .catch((cause: unknown) => {
-        if (cause instanceof DOMException && cause.name === 'AbortError') return
+        if (cause instanceof DOMException && cause.name === 'AbortError') {return}
         setError(cause instanceof Error ? cause.message : String(cause))
         setLoading(false)
       })
@@ -98,12 +98,14 @@ export const useApi = <T>(path: string | null, options: { pollMs?: number } = {}
   }, [path, nonce])
 
   useEffect(() => {
-    if (!options.pollMs || !path) return
+    if (!options.pollMs || !path) {return}
     const timer = setInterval(() => setNonce((value) => value + 1), options.pollMs)
     return () => clearInterval(timer)
   }, [options.pollMs, path])
 
-  return { data, error, loading, reload: () => setNonce((value) => value + 1) }
+  const reload = useCallback(() => setNonce((value) => value + 1), [])
+
+  return { data, error, loading, reload }
 }
 
 export const json = <T>(value: T): string => JSON.stringify(value, null, 2)

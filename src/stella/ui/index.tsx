@@ -141,7 +141,7 @@ export const Delta = ({
   goodWhenPositive?: boolean
   digits?: number
 }) => {
-  if (value == null || !Number.isFinite(value)) return <span className="st-delta" data-tone="flat">—</span>
+  if (value == null || !Number.isFinite(value)) {return <span className="st-delta" data-tone="flat">—</span>}
   const good = value === 0 ? 'flat' : value > 0 === goodWhenPositive ? 'good' : 'bad'
   const sign = value > 0 ? '+' : ''
   return (
@@ -212,7 +212,7 @@ export const Sparkline = ({
   height?: number
   ariaLabel?: string
 }) => {
-  if (values.length === 0) return null
+  if (values.length === 0) {return null}
   const min = Math.min(...values)
   const max = Math.max(...values)
   const span = max - min || 1

@@ -87,8 +87,27 @@ const initialThemePreference = (): ThemePreference => {
 /** 未保存过时使用服务端默认音色 stella（海星） */
 const initialTtsVoice = (): TtsVoice => (read(KEYS.ttsVoice) === 'tide' ? 'tide' : 'stella')
 
+/**
+ * Gateway builds send chat through the local Stella gateway. This placeholder
+ * tells the gateway to use its server-side key; a real key entered in Settings
+ * still wins and keeps the BYOK path working.
+ */
+export const GATEWAY_API_KEY = 'stella-local'
+
+/** True for Stella builds. Other builds keep the upstream BYOK-only flow. */
+export const isGatewayBuild = (): boolean => typeof __STELLA__ !== 'undefined' && __STELLA__
+
+/** Saved key first (BYOK), then the gateway placeholder. Empty values count as absent. */
+const initialApiKey = (): string | null => {
+  const saved = read(KEYS.apiKey)?.trim()
+  if (saved) {
+    return saved
+  }
+  return isGatewayBuild() ? GATEWAY_API_KEY : null
+}
+
 export const useSettings = create<Settings>(() => ({
-  apiKey: read(KEYS.apiKey),
+  apiKey: initialApiKey(),
   locale: initialLocale(),
   location: initialLocation(),
   themePreference: initialThemePreference(),

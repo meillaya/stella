@@ -39,7 +39,7 @@ export const parseHash = (hash: string): Route => {
   const query = new URLSearchParams(rawQuery)
   const route = (name: RouteName, id?: string): Route => ({ name, path, id, query })
 
-  if (segments.length === 0 || segments[0] === 'chat') return route('chat')
+  if (segments.length === 0 || segments[0] === 'chat') {return route('chat')}
   switch (segments[0]) {
     case 'quality':
       return route('quality')
@@ -48,7 +48,7 @@ export const parseHash = (hash: string): Route => {
     case 'datasets':
       return segments[1] ? route('dataset', segments[1]) : route('datasets')
     case 'runs':
-      if (segments[1] === 'compare') return route('compare')
+      if (segments[1] === 'compare') {return route('compare')}
       return segments[1] ? route('run', segments[1]) : route('runs')
     case 'improve':
       return route('improve')
@@ -69,14 +69,14 @@ export const useRoute = (): Route => {
 }
 
 const normalize = (path: string): string => {
-  if (path === '' || path === '#') return '#/'
-  if (path.startsWith('#')) return path
+  if (path === '' || path === '#') {return '#/'}
+  if (path.startsWith('#')) {return path}
   return `#${path.startsWith('/') ? path : `/${path}`}`
 }
 
 export const navigate = (path: string, options: { replace?: boolean } = {}): void => {
   const next = normalize(path)
-  if (window.location.hash === next) return
+  if (window.location.hash === next) {return}
   if (options.replace) {
     window.history.replaceState(null, '', next)
     window.dispatchEvent(new HashChangeEvent('hashchange'))
@@ -90,7 +90,7 @@ export const href = (path: string): string => normalize(path)
 export const withQuery = (path: string, query: Record<string, string | number | null | undefined>): string => {
   const params = new URLSearchParams()
   for (const [key, value] of Object.entries(query)) {
-    if (value !== null && value !== undefined && value !== '') params.set(key, String(value))
+    if (value !== null && value !== undefined && value !== '') {params.set(key, String(value))}
   }
   const suffix = params.toString()
   return suffix ? `${path}?${suffix}` : path

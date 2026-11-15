@@ -20,7 +20,7 @@ const walk = (dir) => {
 
 for (const dir of roots) {
   const full = path.join(root, dir)
-  if (existsSync(full)) walk(full)
+  if (existsSync(full)) {walk(full)}
 }
 
 if (files.length === 0) {
@@ -29,5 +29,6 @@ if (files.length === 0) {
 }
 
 console.log(`[test] ${files.length} file(s)`)
-const result = spawnSync(process.execPath, ['--test', ...files], { cwd: root, stdio: 'inherit' })
+const env = { ...process.env, DEEPSEEK_API_KEY: '' }
+const result = spawnSync(process.execPath, ['--test', ...files], { cwd: root, stdio: 'inherit', env })
 process.exit(result.status ?? 1)

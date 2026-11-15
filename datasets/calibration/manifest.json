@@ -1,0 +1,15 @@
+{
+  "name": "calibration",
+  "version": 1,
+  "createdAt": "2026-11-15",
+  "count": 24,
+  "labels": {
+    "pass": 11,
+    "fail": 13
+  },
+  "contentHash": "sha256:756c8f567c44910d1b477e3669b6447d4a82587b0cb9201184571f6231def113",
+  "path": "datasets/calibration/0001.jsonl",
+  "rubric": "judge-v1 (see docs/EVALS.md when published)",
+  "notes": "Calibration items for judge agreement and Cohen's kappa. Spans good answers, partially wrong answers, overconfident/hallucinated answers, uncited answers, and refusal answers (both correct refusals and wrong refusals). STALE-POLICY CAVEAT: these are SEED LABELS authored by the content developer who wrote the corpus and cases — they are NOT independent human labels and agreement/kappa measured against them is a calibration aid, not human validation. Replace or extend with independently labelled items before making quality claims. The judge should be run with the Support grounded profile rubric (grounding + citation + refusal discipline).",
+  "status": "draft seeds — not independent human labels"
+}

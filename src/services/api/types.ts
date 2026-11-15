@@ -197,6 +197,24 @@ export type MessageUsage = {
   output_tokens: number
   /** 仅当 message_delta 中有对外输出的搜索结果块时出现 */
   server_tool_use?: { web_search_requests: number; tool_search: number }
+  /**
+   * Stella 网关在流式 usage 中附加的溯源信息。字段缺省时表示本次回答没有
+   * 经过网关（或网关未启用记录），聊天界面隐藏溯源条。
+   */
+  lantern_trace_id?: string
+  lantern_sources?: {
+    id: string
+    chunkId: string
+    documentId: string
+    title: string
+    heading: string | null
+    page: number | null
+    score: number
+    snippet: string
+  }[]
+  lantern_cost_usd?: number
+  lantern_latency_ms?: number
+  lantern_pricing_basis?: 'peak' | 'off-peak'
 }
 
 /** content_block_start 携带的初始内容块；工具块已是完整内容 */

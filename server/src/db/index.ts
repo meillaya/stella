@@ -17,14 +17,27 @@ export const openDatabase = (file = config.dbPath): Db => {
   db.exec('PRAGMA busy_timeout = 5000')
   db.exec('PRAGMA foreign_keys = ON')
   db.exec(schema)
+  migrate(db)
   db.prepare(
-    "INSERT INTO meta(key, value) VALUES ('schema_version', '1') ON CONFLICT(key) DO UPDATE SET value = excluded.value"
+    "INSERT INTO meta(key, value) VALUES ('schema_version', '2') ON CONFLICT(key) DO UPDATE SET value = excluded.value"
   ).run()
   return db
 }
 
+/** Additive migrations for databases created before a column existed. */
+const ensureColumn = (db: Db, table: string, column: string, definition: string): void => {
+  const columns = db.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[]
+  if (!columns.some((entry) => entry.name === column)) {
+    db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`)
+  }
+}
+
+const migrate = (db: Db): void => {
+  ensureColumn(db, 'traces', 'retrieval_error', 'TEXT')
+}
+
 export const getDb = (): Db => {
-  if (!instance) instance = openDatabase()
+  if (!instance) {instance = openDatabase()}
   return instance
 }
 
@@ -54,7 +67,7 @@ export const deleteSetting = (key: string): void => {
 
 export const getJsonSetting = <T>(key: string, fallback: T): T => {
   const raw = getSetting(key)
-  if (!raw) return fallback
+  if (!raw) {return fallback}
   try {
     return JSON.parse(raw) as T
   } catch {
@@ -68,7 +81,7 @@ export const setJsonSetting = (key: string, value: unknown): void => {
 
 /** Convenience for JSON columns. */
 export const parseJson = <T>(raw: string | null | undefined, fallback: T): T => {
-  if (!raw) return fallback
+  if (!raw) {return fallback}
   try {
     return JSON.parse(raw) as T
   } catch {

@@ -19,14 +19,14 @@ A case:
   "slices": ["stale-policy"],
   "messages": [{ "role": "user", "content": "What is the refund window for annual plans?" }],
   "expected": {
-    "answer": "45 days ...",
+    "answer": "14 days ...",
     "behavior": "answer",
-    "mustContain": ["45 days"],
+    "mustContain": ["14 days"],
     "mustNotContain": ["30 days"],
-    "anchors": [{ "doc": "release-notes/2026-10.md", "heading": "Policy v4.0" }],
+    "anchors": [{ "doc": "release-notes/2026-10.md", "heading": "Billing policy v4.0 — refunds and cancellations" }],
     "minCitations": 1
   },
-  "notes": "Supersedes the 30-day policy.",
+  "notes": "Governing policy effective 2026-11-01; supersedes the 30-day policy.",
   "sourceTraceId": "trace_..."
 }
 ```

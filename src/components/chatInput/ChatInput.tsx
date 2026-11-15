@@ -31,6 +31,7 @@ import { DraftAttachments } from './DraftAttachments.js'
 import { useVoiceInput } from './useVoiceInput.js'
 import { VoiceButton } from './VoiceButton.js'
 import { Spectrum } from './Spectrum.js'
+import { ProfileChip } from '../../stella/chat/ProfileChip.js'
 import { useTranslate } from '../../i18n/index.js'
 import styles from './ChatInput.module.css'
 
@@ -227,6 +228,7 @@ const Input = ({ sessionId }: { sessionId: string | null }) => {
             </button>
           </Tooltip>
         </div>
+        <ProfileChip />
         <div className={styles.right}>
           <VoiceButton
             status={voice.status}

@@ -1,10 +1,33 @@
 # Stella
 
+[![CI](https://github.com/Meillaya/stella/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Meillaya/stella/actions/workflows/ci.yml)
+
 **Every answer, accounted for.**
 
 Stella is a local-first, chat-first workbench for teams shipping DeepSeek-powered assistants. It starts from DeepSeek's open-source [chat-demo](https://github.com/deepseek-ai/chat-demo) and turns it into a quality loop: **capture real chats → curate datasets → evaluate retrieval and answers → improve the profile → gate the release**, with a validated fine-tuning data pipeline and an honest account of what DeepSeek does and does not offer.
 
-> Status: early `v0.1.0`. The app, gateway, retrieval, evaluation and release-gate loop are under active construction.
+> Status: `v0.1.0`. The chat, gateway, retrieval, evaluation and release-gate loop
+> are working end-to-end against the live DeepSeek API; replay for the rerank-on
+> demo profile is still a labelled mechanics-only limitation.
+
+## Live evidence (2026-11-15)
+
+The bundled Meridian demo, run live on `deepseek-flash` off-peak:
+
+| | Baseline | Grounded |
+| --- | --- | --- |
+| Pass rate | 57.5% | **90.0%** |
+| Retrieval recall@k | 65.4% | 95.6% |
+| Cost / successful answer | $0.00012 | $0.00010 |
+
++32.5 pp (95% CI +17.5…+47.5), **0 regressions**, release gate **PASS**, and a
+33-example validated SFT export. The judge-enabled advisory run scored 82.5% with
+κ = 0.391, which is exactly why judge calibration is shown but not used as the
+gate. See [`docs/DEMO.md`](docs/DEMO.md) for the full run and honest limits.
+
+![Quality board](design/screenshots/app-quality.png)
+![Chat with provenance](design/screenshots/app-chat-answer.png)
+![Run scorecard](design/screenshots/app-run-detail.png)
 
 ## Why this exists
 
@@ -19,8 +42,10 @@ Requirements: **Node 24+** and **pnpm 11+**. No Python, Docker or cluster is req
 ```bash
 pnpm install
 cp .env.example .env.local        # add DEEPSEEK_API_KEY for live mode
-pnpm seed                         # create the demo collection and dataset
+pnpm seed                         # demo collection, dataset snapshot, profiles
 pnpm dev                          # server :8787, app :8090
+# or run the whole loop headlessly
+./bin/stella demo --live          # seed → baseline → grounded → gate → SFT export
 ```
 
 Open http://127.0.0.1:8090 for the dev server, or:

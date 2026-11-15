@@ -85,6 +85,12 @@ never a fabricated answer. Recording is done with
 the cassette format described in `fixtures/demo/README.md`. Replay proves
 mechanics and statistics in CI; it does not make claims about live quality.
 
+Known limitation: the demo's default grounded profile enables LLM rerank, and
+rerank calls are not recorded, so `stella demo --replay` against that profile
+fails loudly on missing rerank cassettes. Record with a rerank-off profile (or
+add rerank cassette recording) before relying on replay for the demo; the live
+gate is authoritative.
+
 ## Ingestion limits
 
 - Local text/Markdown/HTML: no key needed.

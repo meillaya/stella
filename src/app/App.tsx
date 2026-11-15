@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import clsx from 'clsx'
 import { useTranslate } from '../i18n/index.js'
 import { useSettings } from '../services/settings.js'
 import { useIsMobile, useMobileViewport, usePreventPageScroll } from './viewport.js'
@@ -24,6 +25,9 @@ import { stopReadAloud } from '../services/speech/readAloud.js'
 import { CollapsedSider } from '../components/sider/CollapsedSider.js'
 import { closeMobileSider } from '../components/sider/mobileSiderState.js'
 import { MobileSider, Sider } from '../components/sider/Sider.js'
+import { useRoute } from '../stella/router.js'
+import { StellaMobileNav, StellaRail } from '../stella/shell/StellaRail.js'
+import { WorkbenchRoute } from '../stella/pages/index.js'
 import styles from './App.module.css'
 
 export const App = () => {
@@ -49,6 +53,8 @@ export const App = () => {
     state.activeId === null ? false : Object.hasOwn(state.streaming, state.activeId)
   )
   const activeId = useChatStore((state) => state.activeId)
+  const route = useRoute()
+  const chatRoute = route.name === 'chat'
 
   usePreventPageScroll(isMobile)
 
@@ -60,12 +66,12 @@ export const App = () => {
   useEffect(() => onUploadNotice(showToast), [])
   useEffect(bindChatPersistence, [])
 
-  // 搜索结果面板只属于当前会话
-  useEffect(closeSearchPanel, [activeId])
-  // 切换会话时停止朗读
-  useEffect(stopReadAloud, [activeId])
-  // 移动端选中会话、切换布局后收起抽屉
-  useEffect(closeMobileSider, [activeId, isMobile])
+  // 搜索结果面板只属于当前会话；离开对话路由时一并收起
+  useEffect(closeSearchPanel, [activeId, route.name])
+  // 切换会话或离开对话时停止朗读
+  useEffect(stopReadAloud, [activeId, route.name])
+  // 移动端选中会话、切换布局或路由后收起抽屉
+  useEffect(closeMobileSider, [activeId, isMobile, route.name])
 
   useEffect(() => {
     void initChat()
@@ -76,7 +82,8 @@ export const App = () => {
   return (
     <>
       <div ref={frameRef} className={styles.frame}>
-        {isMobile ? <MobileSider /> : siderCollapsed ? null : <Sider />}
+        {!isMobile ? <StellaRail route={route} /> : null}
+        {chatRoute ? isMobile ? <MobileSider /> : siderCollapsed ? null : <Sider /> : null}
         <main className={styles.main}>
           {saveError ? (
             <div className={styles.saveError} role="alert">
@@ -91,42 +98,53 @@ export const App = () => {
               </Button>
             </div>
           ) : null}
-          <div className={styles.content}>
-            {siderCollapsed ? <CollapsedSider /> : null}
-            {!ready || (activeId !== null && !session) ? (
-              <div className={styles.loadingView}>
-                {isMobile ? <MobileHeader /> : null}
-                <div className={styles.loadingState} role="status" aria-live="polite">
-                  <span>
-                    {(!ready ? initError : sessionLoadError)
-                      ? t(!ready ? 'sessionListLoadFailed' : 'sessionLoadFailed')
-                      : t('sessionLoading')}
-                  </span>
-                  {(!ready ? initError : sessionLoadError) ? (
-                    <Button
-                      variant="outlined"
-                      size="m"
-                      onClick={() => {
-                        if (!ready) {
-                          void initChat()
-                        } else if (activeId !== null) {
-                          selectSession(activeId)
-                        }
-                      }}
-                    >
-                      {t('retry')}
-                    </Button>
-                  ) : null}
-                </div>
-              </div>
-            ) : session ? (
-              <SessionView
-                session={session}
-                streaming={streaming}
-                siderCollapsed={siderCollapsed}
-              />
+          <div className={clsx(styles.content, !chatRoute && styles.workbench)}>
+            {chatRoute ? (
+              <>
+                {siderCollapsed ? <CollapsedSider /> : null}
+                {!ready || (activeId !== null && !session) ? (
+                  <div className={styles.loadingView}>
+                    {isMobile ? <MobileHeader /> : null}
+                    <div className={styles.loadingState} role="status" aria-live="polite">
+                      <span>
+                        {(!ready ? initError : sessionLoadError)
+                          ? t(!ready ? 'sessionListLoadFailed' : 'sessionLoadFailed')
+                          : t('sessionLoading')}
+                      </span>
+                      {(!ready ? initError : sessionLoadError) ? (
+                        <Button
+                          variant="outlined"
+                          size="m"
+                          onClick={() => {
+                            if (!ready) {
+                              void initChat()
+                            } else if (activeId !== null) {
+                              selectSession(activeId)
+                            }
+                          }}
+                        >
+                          {t('retry')}
+                        </Button>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : session ? (
+                  <SessionView
+                    session={session}
+                    streaming={streaming}
+                    siderCollapsed={siderCollapsed}
+                  />
+                ) : (
+                  <Welcome />
+                )}
+              </>
             ) : (
-              <Welcome />
+              <>
+                {isMobile ? <StellaMobileNav route={route} /> : null}
+                <div className={styles.workbenchBody}>
+                  <WorkbenchRoute route={route} />
+                </div>
+              </>
             )}
           </div>
         </main>

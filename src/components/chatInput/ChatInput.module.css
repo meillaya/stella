@@ -248,7 +248,10 @@
   flex: 1;
   align-items: center;
   gap: 10px;
-  min-width: 0;
+  /* Keep room for both icon-only toggles (40px each + gap) so the Stella
+     profile chip can never paint on top of them on narrow phones. */
+  min-width: 90px;
+  overflow: hidden;
 }
 
 .collapsedToggles .toggleLabel {

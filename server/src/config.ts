@@ -8,13 +8,13 @@ const loadedFrom = new Set<string>()
 
 /** Minimal .env loader. Existing process.env values always win. */
 const loadEnv = (file: string): void => {
-  if (!existsSync(file)) return
+  if (!existsSync(file)) {return}
   const text = readFileSync(file, 'utf8')
   for (const rawLine of text.split(/\r?\n/)) {
     const line = rawLine.trim()
-    if (!line || line.startsWith('#')) continue
+    if (!line || line.startsWith('#')) {continue}
     const match = /^(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/.exec(line)
-    if (!match) continue
+    if (!match) {continue}
     const key = match[1] as string
     let value = match[2] ?? ''
     if (

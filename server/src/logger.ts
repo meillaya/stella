@@ -6,10 +6,10 @@ const order: Record<Level, number> = { debug: 10, info: 20, warn: 30, error: 40 
 const threshold = order[(config.logLevel as Level) in order ? (config.logLevel as Level) : 'info']
 
 const write = (level: Level, message: string, detail?: unknown): void => {
-  if (order[level] < threshold) return
+  if (order[level] < threshold) {return}
   const line = `/stella/ ${level.toUpperCase()} ${message}${detail === undefined ? '' : ` ${safe(detail)}`}`
-  if (level === 'error' || level === 'warn') process.stderr.write(`${line}\n`)
-  else process.stdout.write(`${line}\n`)
+  if (level === 'error' || level === 'warn') {process.stderr.write(`${line}\n`)}
+  else {process.stdout.write(`${line}\n`)}
 }
 
 const safe = (value: unknown): string => {
@@ -30,12 +30,12 @@ export const log = {
 
 /** Redact secrets before logging a request or error payload. */
 export const redact = (value: unknown): unknown => {
-  if (Array.isArray(value)) return value.map(redact)
+  if (Array.isArray(value)) {return value.map(redact)}
   if (value && typeof value === 'object') {
     const out: Record<string, unknown> = {}
     for (const [key, entry] of Object.entries(value)) {
-      if (/key|authorization|token|secret/i.test(key)) out[key] = '[redacted]'
-      else out[key] = redact(entry)
+      if (/key|authorization|token|secret/i.test(key)) {out[key] = '[redacted]'}
+      else {out[key] = redact(entry)}
     }
     return out
   }

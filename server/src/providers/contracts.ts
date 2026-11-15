@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { DEFAULT_MODEL, asModelId, computeCost, type CostBreakdown } from '../../../shared/pricing.ts'
+import { asModelId, computeCost, type CostBreakdown } from '../../../shared/pricing.ts'
 import type { ModelId, PricingBasis, TokenUsage } from '../../../shared/types.ts'
 
 /**
@@ -136,7 +136,7 @@ export const consumeChat = async (
 ): Promise<ChatResult> => {
   for (;;) {
     const next = await stream.next()
-    if (next.done) return next.value
+    if (next.done) {return next.value}
   }
 }
 

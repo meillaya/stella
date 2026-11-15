@@ -26,12 +26,14 @@
   min-width: 0;
   padding-left: 4px;
   overflow: hidden;
-  font-size: 20px;
+  font-family: var(--st-font-ui);
+  font-size: 19px;
   line-height: 22px;
   font-weight: 600;
+  letter-spacing: -0.02em;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: var(--dsw-alias-brand-primary);
+  color: var(--dsw-alias-label-primary);
 }
 
 .newChat {

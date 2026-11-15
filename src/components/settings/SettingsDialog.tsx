@@ -32,8 +32,10 @@ import { Button } from '../base/Button.js'
 import { Modal } from '../base/Modal.js'
 import { Select } from '../base/Select.js'
 import { showToast } from '../base/toastState.js'
+import { IconStar } from '../../stella/ui/icons.js'
 import { ApiKeyConfirm, ApiKeyField, useApiKeyEditor } from './ApiKeyField.js'
 import { closeSettings, useSettingsDialog, type SettingsSection } from './settingsDialogState.js'
+import { StellaSettingsSection } from './StellaSettingsSection.js'
 import styles from './Settings.module.css'
 
 /**
@@ -52,6 +54,11 @@ const sections: { value: SettingsSection; label: TranslationKey; icon: ReactNode
     icon: <IconSettingsOutline16 />,
   },
   { value: 'data', label: 'settingDialogAsideDataOptionLabel', icon: <IconDataOutline16 /> },
+  {
+    value: 'stella',
+    label: 'settingDialogAsideStellaOptionLabel',
+    icon: <IconStar size={15} />,
+  },
 ]
 
 const SettingsContent = () => {
@@ -101,7 +108,7 @@ const SettingsContent = () => {
               <TtsVoiceSetting />
               <LocationSetting />
             </>
-          ) : (
+          ) : section === 'data' ? (
             <>
               <ApiKeyField editor={apiKeyEditor} />
               <ImportHistory historyImport={historyImport} disabled={historyBusy} />
@@ -123,6 +130,8 @@ const SettingsContent = () => {
               />
               {isMobile ? <ApiKeyConfirm editor={apiKeyEditor} /> : null}
             </>
+          ) : (
+            <StellaSettingsSection />
           )}
         </div>
       </Modal>
