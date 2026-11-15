@@ -286,7 +286,9 @@ Command: `./bin/stella demo --live --no-judge --budget 0.40` on `deepseek-flash`
 
 Paired comparison: **+32.5 pp** (95% CI +17.5…+47.5), 13 improved, **0 regressed**,
 27 unchanged. Gate: **PASS** (exit 0) with one warning that faithfulness was not
-measured because the judge was disabled. Fine-tune preflight: 33 examples
+measured because the judge was disabled; the review artifact marks that row
+**SKIPPED**, not PASS. A copy of the live artifact is in
+[`docs/examples/release-review.html`](examples/release-review.html). Fine-tune preflight: 33 examples
 (train 27 / val 3 / holdout 3), 0 duplicates, 0 PII redactions, 0 contamination
 (self-suite overlap is a warning, not a hidden pass).
 

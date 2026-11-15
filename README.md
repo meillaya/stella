@@ -21,7 +21,7 @@ The bundled Meridian demo, run live on `deepseek-flash` off-peak:
 +32.5 pp (95% CI +17.5…+47.5), **0 regressions**, release gate **PASS**, and a
 33-example validated SFT export. The judge-enabled advisory run scored 82.5% with
 κ = 0.391, which is exactly why judge calibration is shown but not used as the
-gate. See [`docs/DEMO.md`](docs/DEMO.md) for the full run and honest limits.
+gate. See the actual [release review](docs/examples/release-review.html) (PASS with the unmeasured rubric marked SKIPPED), the [gate Markdown](docs/examples/release-review.md), the [SFT manifest](docs/examples/sft-manifest.json), and [`docs/DEMO.md`](docs/DEMO.md) for the full run and honest limits.
 
 ![Quality board](design/screenshots/app-quality.png)
 ![Chat with provenance](design/screenshots/app-chat-answer.png)

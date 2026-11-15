@@ -970,7 +970,9 @@ const thresholdRows = (
   const failures = new Set(artifact.gate.result.failures.map((entry) => entry.rule))
   const warnings = artifact.gate.result.warnings
   const missing = (label: string): boolean =>
-    warnings.some((warning) => warning.startsWith(`${label} was not measured`))
+    warnings.some((warning) =>
+      warning.toLowerCase().startsWith(`${label.toLowerCase()} was not measured`)
+    )
   const rows: { label: string; actual: string; expected: string; status: string }[] = []
   const add = (
     rule: string,

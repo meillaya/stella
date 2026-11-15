@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stella release gate — PASS (WARN) — support@1</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-2: #1e222b;
+    --text: #e8eaf0;
+    --muted: #9aa3b2;
+    --line: #2a303c;
+    --pass: #2fbf71;
+    --fail: #ef5350;
+    --warn: #f2b84b;
+    --accent: #6aa9ff;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 32px 20px 64px; background: var(--bg); color: var(--text);
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 1060px; margin: 0 auto; }
+  h1 { font-size: 24px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h2 { font-size: 17px; margin: 0 0 14px; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  .badge { display: inline-block; padding: 5px 13px; border-radius: 999px; font-weight: 700; font-size: 13px; letter-spacing: .06em; }
+  .badge.pass { background: rgba(47,191,113,.14); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .badge.warn { background: rgba(242,184,75,.14); color: var(--warn); border: 1px solid rgba(242,184,75,.4); }
+  .badge.fail { background: rgba(239,83,80,.14); color: var(--fail); border: 1px solid rgba(239,83,80,.4); }
+  .banner { border-radius: 10px; padding: 12px 16px; margin: 18px 0; border: 1px solid var(--line); background: var(--panel); }
+  .banner.fail { border-color: rgba(239,83,80,.45); background: rgba(239,83,80,.08); }
+  .banner.warn { border-color: rgba(242,184,75,.35); background: rgba(242,184,75,.07); }
+  .banner.override { border-color: rgba(106,169,255,.4); background: rgba(106,169,255,.08); }
+  .banner ul { margin: 8px 0 0; padding-left: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0 8px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .card .label { color: var(--muted); font-size: 12px; letter-spacing: .01em; }
+  .card .value { font-size: 24px; font-weight: 650; margin-top: 4px; }
+  .card .note { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .01em; }
+  tr:last-child td { border-bottom: none; }
+  .mono { font-family: var(--mono); font-size: 13px; }
+  .small { font-size: 12.5px; }
+  .muted { color: var(--muted); }
+  .bad { color: var(--fail); }
+  .up { color: var(--pass); }
+  .down { color: var(--fail); }
+  .flat { color: var(--muted); }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .05em; }
+  .pill.pass { background: rgba(47,191,113,.14); color: var(--pass); }
+  .pill.fail { background: rgba(239,83,80,.14); color: var(--fail); }
+  .pill.skip { background: rgba(154,163,178,.14); color: var(--muted); }
+  .tag { color: var(--muted); font-size: 12px; }
+  .case { border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; margin: 8px 0; background: var(--panel-2); }
+  .case summary { cursor: pointer; }
+  .case .answer { margin-top: 8px; font-size: 13.5px; color: #cfd5df; border-left: 3px solid var(--line); padding-left: 10px; white-space: pre-wrap; }
+  dl.kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 20px; margin: 0; }
+  dl.kv div { border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+  dt { color: var(--muted); font-size: 11.5px; letter-spacing: .01em; }
+  dd { margin: 2px 0 0; }
+  footer { color: var(--muted); font-size: 12px; margin-top: 28px; line-height: 1.7; }
+  .hashline { word-break: break-all; }
+</style>
+</head>
+<body>
+<main>
+  <span class="badge warn">PASS (WARN)</span>
+  <h1>Release gate review — support@1</h1>
+  <p class="sub">Baseline <span class="mono">run_816530ac2c174553aea2</span> → candidate <span class="mono">run_358c934230a44b9ebcbd</span> · checked 2026-11-15 10:59:50 UTC · gate <span class="mono">gate_615ee1ba44b24a218e97</span></p>
+  
+  
+  <div class="banner warn"><strong>Warnings</strong><ul><li>faithfulness (rubric) was not measured (no matching graded cases); threshold skipped</li></ul></div>
+
+  <div class="grid">
+    <div class="card"><div class="label">Pass rate (candidate)</div><div class="value">90.0%</div><div class="note">CI 76.9%–96.0% · 36/40 cases</div></div>
+    <div class="card"><div class="label">Δ vs baseline</div><div class="value up">+32.50 pp</div><div class="note">40 paired cases · no material regression</div></div>
+    <div class="card"><div class="label">Cost / successful answer</div><div class="value">$0.00010</div><div class="note">$0.00367 total · $0.00009/case</div></div>
+    <div class="card"><div class="label">p95 latency</div><div class="value">1514 ms</div><div class="note">p50 1081 ms · max 8000 ms</div></div>
+    <div class="card"><div class="label">Grader errors</div><div class="value">0</div><div class="note">0.0% of cases · limit 10%</div></div>
+    <div class="card"><div class="label">Judge agreement</div><div class="value">—</div><div class="note">κ — · min 70%</div></div>
+  </div>
+
+  <section>
+    <h2>Thresholds</h2>
+    <table><thead><tr><th>Rule</th><th>Actual</th><th>Expected</th><th>Status</th></tr></thead><tbody><tr><td>Pass rate</td><td class="mono">90.00%</td><td class="mono">&gt;= 85%</td><td><span class="pill pass">PASS</span></td></tr>
+<tr><td>Faithfulness (rubric 0-1)</td><td class="mono">not measured</td><td class="mono">&gt;= 0.85</td><td><span class="pill skip">SKIPPED</span></td></tr>
+<tr><td>Citation validity</td><td class="mono">100.00%</td><td class="mono">&gt;= 90%</td><td><span class="pill pass">PASS</span></td></tr>
+<tr><td>Refusal accuracy</td><td class="mono">100.00%</td><td class="mono">&gt;= 85%</td><td><span class="pill pass">PASS</span></td></tr>
+<tr><td>Cost per case</td><td class="mono">$0.00009</td><td class="mono">&lt;= $0.0100</td><td><span class="pill pass">PASS</span></td></tr>
+<tr><td>p95 latency</td><td class="mono">1514 ms</td><td class="mono">&lt;= 8000 ms</td><td><span class="pill pass">PASS</span></td></tr></tbody></table>
+  </section>
+
+  <section>
+    <h2>Slices</h2>
+    <table><thead><tr><th>Slice</th><th>Cases</th><th>Baseline</th><th>Candidate</th><th>Δ</th></tr></thead><tbody><tr><td>citations</td><td class="mono">4</td><td class="mono">75.0%</td><td class="mono">100.0%</td><td class="mono up">+25.00 pp</td></tr>
+<tr><td>direct</td><td class="mono">12</td><td class="mono">66.7%</td><td class="mono">100.0%</td><td class="mono up">+33.33 pp</td></tr>
+<tr><td>multi-hop</td><td class="mono">8</td><td class="mono">75.0%</td><td class="mono">100.0%</td><td class="mono up">+25.00 pp</td></tr>
+<tr><td>numbers</td><td class="mono">5</td><td class="mono">80.0%</td><td class="mono">100.0%</td><td class="mono up">+20.00 pp</td></tr>
+<tr><td>stale-policy</td><td class="mono">5</td><td class="mono">0.0%</td><td class="mono">40.0%</td><td class="mono up">+40.00 pp</td></tr>
+<tr><td>unanswerable</td><td class="mono">6</td><td class="mono">33.3%</td><td class="mono">83.3%</td><td class="mono up">+50.00 pp</td></tr></tbody></table>
+    <p class="muted small">Slice regression rules apply to slices with at least 8 paired cases; the allowed drop is 8 pp. Overall allowed drop: 3 pp.</p>
+  </section>
+
+  <section>
+    <h2>Judge trust</h2>
+    <p class="muted">The rubric judge was not enabled for this run, so faithfulness and judge agreement are unmeasured. Gate thresholds for those metrics are skipped with a warning.</p>
+  </section>
+
+  <section>
+    <h2>Failing cases (candidate)</h2>
+    <details class="case"><summary><span class="mono">sup-0027</span> <span class="tag">stale-policy</span></summary><div class="small"><strong>Failed graders:</strong> not_contains (found forbidden: &quot;12%&quot;)</div><div class="answer">Under the current policy, a partial refund on an annual plan after the full-refund window carries a **5% administration fee** [1]. This is policy v4.0, in effect for all requests dated 2026-11-01 or later [3]. The partial-refund window is day 15 through day 75 after purchase or renewal [1]. The older 12% fee in v3.2 applied only to requests submitted before 2026-11-01 [2].</div></details>
+<details class="case"><summary><span class="mono">sup-0029</span> <span class="tag">stale-policy</span></summary><div class="small"><strong>Failed graders:</strong> contains (missing: &quot;30-day&quot;); contains (missing: &quot;restore&quot;)</div><div class="answer">Under retention policy v4.0, which took effect on **2026-11-01**, the deleted workspace soft-delete period is **30 days** for all plans (Starter, Team, Business, Enterprise) [3][2]. After that period the workspace is permanently purged [3].
+
+This supersedes policy v3.0, which had a **45-day** soft-delete period [1][4].</div></details>
+<details class="case"><summary><span class="mono">sup-0030</span> <span class="tag">stale-policy</span></summary><div class="small"><strong>Failed graders:</strong> not_contains (found forbidden: &quot;12 months&quot;)</div><div class="answer">Under retention policy v4.0, audit logs are retained for **24 months** on Business [1][2]. (v3.0 historically listed 12 months, but that is superseded and must not be quoted for current policy [3][4].)</div></details>
+<details class="case"><summary><span class="mono">sup-0036</span> <span class="tag">unanswerable</span></summary><div class="small"><strong>Failed graders:</strong> not_contains (found forbidden: &quot;employees&quot;)</div><div class="answer">I do not know. The sources describe Meridian&#39;s product, plans, and policies but contain no information about its number of employees or headquarters.</div></details>
+  </section>
+
+  <section>
+    <h2>Provenance</h2>
+    <table>
+      <thead><tr><th>Field</th><th>Baseline</th><th>Candidate</th></tr></thead>
+      <tbody>
+        <tr><td>Run id</td><td class="mono">run_816530ac2c174553aea2</td><td class="mono">run_358c934230a44b9ebcbd</td></tr>
+        <tr><td>Profile</td><td>Support baseline<br><span class="mono small">sha256:33ab3582711e7f5dfb6cbb4e67dab149fa56059106839614a7df428507feb975</span></td><td>Support grounded<br><span class="mono small">sha256:0bf3d6abfaf0d3cd367af33e4321b963730f266dbd82c9c284a91bf89e4cc9f2</span></td></tr>
+        <tr><td>Dataset</td><td>support v1<br><span class="mono small hashline">sha256:2013f756c6e62d762c21871a02b0703f38196d3a39f3c1c82f766c36f87f75d2</span></td><td>support v1<br><span class="mono small hashline">sha256:2013f756c6e62d762c21871a02b0703f38196d3a39f3c1c82f766c36f87f75d2</span></td></tr>
+        <tr><td>Dataset version id</td><td class="mono small hashline">dsv_ccb0b3b3ee2141ba96e9</td><td class="mono small hashline">dsv_ccb0b3b3ee2141ba96e9</td></tr>
+        <tr><td>Run config hash</td><td class="mono small hashline">sha256:8490f3690e48c3d09cf189ed59e06e367ab17340936bafaca9df994606610c7d</td><td class="mono small hashline">sha256:8490f3690e48c3d09cf189ed59e06e367ab17340936bafaca9df994606610c7d</td></tr>
+        <tr><td>Provider / mode</td><td>deepseek / live</td><td>deepseek / live</td></tr>
+        <tr><td>Pricing basis</td><td>off-peak</td><td>off-peak</td></tr>
+        <tr><td>Off-peak scheduled</td><td>no</td><td>no</td></tr>
+      </tbody>
+    </table>
+    <footer>
+      <div>Gate config: /home/mei/Documents/flow-qs/stella.gate.json · <span class="mono hashline">sha256:b5127a5a99018246bf9014075cef3a654285e6faf64e94bcd093b1e1f0d1674d</span></div>
+      <div>Generated by stella 0.1.0 at 2026-11-15 10:59:50 UTC. Thresholds, regression rules, judge rules and failing cases are recorded in gate.json next to this file. Re-run the gate against the same run ids and config hash to reproduce this review.</div>
+      <div>faithfulness (rubric) was not measured (no matching graded cases); threshold skipped</div>
+    </footer>
+  </section>
+</main>
+</body>
+</html>

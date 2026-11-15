@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "exportId": "ft_2f9ee128eca540e89cc8",
+  "createdAt": 1794737738444,
+  "format": "sft",
+  "dataset": {
+    "id": "ds_de169574ed254dc6a9f5",
+    "name": "support",
+    "version": 1,
+    "versionId": "dsv_ccb0b3b3ee2141ba96e9",
+    "contentHash": "sha256:2013f756c6e62d762c21871a02b0703f38196d3a39f3c1c82f766c36f87f75d2"
+  },
+  "filters": {
+    "minChars": 40,
+    "maxChars": 12000,
+    "dedupe": true,
+    "nearDupeThreshold": 0.8,
+    "redactPii": true,
+    "dropRefusals": true,
+    "split": {
+      "train": 0.8,
+      "val": 0.1,
+      "holdout": 0.1
+    },
+    "contamination": "fail",
+    "evalSuite": null,
+    "includeRunIds": [],
+    "seed": 42
+  },
+  "counts": {
+    "examples": 33,
+    "dropped": 7,
+    "duplicates": 0,
+    "piiRedactions": 0,
+    "train": 27,
+    "val": 3,
+    "holdout": 3,
+    "contamination": 0,
+    "estimatedTokens": 2387
+  },
+  "splits": {
+    "train": {
+      "examples": 27,
+      "path": "sft-train.jsonl",
+      "contentHash": "sha256:9f576a94f8fb50c76949a9c92adc09760abc998dedc4f23b6d721921728c26c8"
+    },
+    "val": {
+      "examples": 3,
+      "path": "sft-val.jsonl",
+      "contentHash": "sha256:8840c5059e7dfbaca1d151f97d44ce1126eec1b75ee3cd5d96501af5509c1732"
+    },
+    "holdout": {
+      "examples": 3,
+      "path": "sft-holdout.jsonl",
+      "contentHash": "sha256:6ccf8522f29b27b9a4134b5cb4a0358f79e91e987184dd1c3965bfa6139af91d"
+    }
+  },
+  "provenance": {
+    "caseIds": [
+      "sup-0001",
+      "sup-0002",
+      "sup-0003",
+      "sup-0004",
+      "sup-0005",
+      "sup-0006",
+      "sup-0007",
+      "sup-0008",
+      "sup-0009",
+      "sup-0010",
+      "sup-0011",
+      "sup-0012",
+      "sup-0013",
+      "sup-0014",
+      "sup-0015",
+      "sup-0016",
+      "sup-0017",
+      "sup-0018",
+      "sup-0019",
+      "sup-0020",
+      "sup-0021",
+      "sup-0022",
+      "sup-0023",
+      "sup-0024",
+      "sup-0025",
+      "sup-0026",
+      "sup-0027",
+      "sup-0028",
+      "sup-0029",
+      "sup-0030",
+      "sup-0037",
+      "sup-0038",
+      "sup-0040"
+    ],
+    "runIds": [],
+    "traceIds": [],
+    "datasetContentHash": "sha256:2013f756c6e62d762c21871a02b0703f38196d3a39f3c1c82f766c36f87f75d2",
+    "generator": "stella 0.1.0 fine-tune pipeline",
+    "unbuildableCases": 6
+  },
+  "contamination": {
+    "suite": "support",
+    "checked": false,
+    "self": true,
+    "ngramSize": 13,
+    "examples": 0,
+    "policy": "fail",
+    "indexSize": 0
+  },
+  "pii": {
+    "redactions": 0,
+    "byType": {
+      "email": 0,
+      "phone": 0,
+      "card": 0,
+      "ip": 0,
+      "apiKey": 0
+    }
+  },
+  "dedupe": {
+    "exact": 0,
+    "near": 0,
+    "threshold": 0.8
+  },
+  "schemaChecks": [
+    "format:sft",
+    "non-empty content",
+    "user+assistant turns"
+  ],
+  "notes": [
+    "DeepSeek does not offer a fine-tuning endpoint; this dataset is for external training (Unsloth, Axolotl, Together or an OpenAI-compatible endpoint).",
+    "export source is the eval suite itself (support); 13-gram self-overlap is recorded as a warning, not a block",
+    "1 refusal-only example(s) removed"
+  ]
+}
