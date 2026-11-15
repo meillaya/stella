@@ -323,6 +323,38 @@ export type Run = {
   error: string | null
 }
 
+/** A metric with its baseline/candidate values. `delta` for pass-rate style metrics is in percentage points. */
+export type MetricDelta = {
+  baseline: number | null
+  candidate: number | null
+  delta: number | null
+  deltaPct: number | null
+  ciLowPp?: number | null
+  ciHighPp?: number | null
+  probabilityNotBetter?: number | null
+}
+
+export type Comparison = {
+  baselineRunId: string
+  candidateRunId: string
+  cases: number
+  passRate: MetricDelta
+  costPerPassUsd: MetricDelta
+  p95LatencyMs: MetricDelta
+  improved: number
+  regressed: number
+  unchanged: number
+  judgeAgreement: number | null
+}
+
+export type SliceComparison = {
+  slice: string
+  cases: number
+  passRate: MetricDelta
+  regressed: boolean
+}
+
+
 /* ------------------------------ gates ------------------------------ */
 
 export type GateThresholds = {

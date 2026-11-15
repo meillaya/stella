@@ -1,0 +1,26 @@
+{
+  "suite": "support@1",
+  "minCases": 30,
+  "thresholds": {
+    "passRate": 0.85,
+    "faithfulness": 0.85,
+    "citationValidity": 0.9,
+    "refusalAccuracy": 0.85,
+    "maxCostPerCaseUsd": 0.01,
+    "maxP95LatencyMs": 8000
+  },
+  "regression": {
+    "overallMaxDropPp": 3,
+    "sliceMaxDropPp": 8,
+    "minSliceCases": 8
+  },
+  "judge": {
+    "requireCalibration": false,
+    "minAgreement": 0.7,
+    "maxGraderErrorsPct": 10
+  },
+  "overrides": {
+    "allowed": true,
+    "requireReason": true
+  }
+}
